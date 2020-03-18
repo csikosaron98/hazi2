@@ -14,7 +14,6 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
-//komment
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -162,8 +161,8 @@ namespace hazi2
             Canvas.SetLeft(porszivo, p.x);
             Canvas.SetTop(porszivo, p.y - H);
             string[,] tmp = new string[2, 5];
-            VacCleaner VAC = new VacCleaner(palya, robotpoz);
-            tmp = VAC.getData(irany.fel);
+            VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.fel);
+            tmp = VAC.getData();
             jartpoz.Add(new poz(robotpoz.x, robotpoz.y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
@@ -176,8 +175,8 @@ namespace hazi2
             Canvas.SetLeft(porszivo, p.x);
             Canvas.SetTop(porszivo, p.y + H);
             string[,] tmp = new string[2, 5];
-            VacCleaner VAC = new VacCleaner(palya, robotpoz);
-            tmp = VAC.getData(irany.le);
+            VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.le);
+            tmp = VAC.getData();
             jartpoz.Add(new poz(robotpoz.x, robotpoz.y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
@@ -190,8 +189,8 @@ namespace hazi2
             Canvas.SetLeft(porszivo, p.x + W);
             Canvas.SetTop(porszivo, p.y);
             string[,] tmp = new string[2, 5];
-            VacCleaner VAC = new VacCleaner(palya, robotpoz);
-            tmp = VAC.getData(irany.jobbra);
+            VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.jobbra);
+            tmp = VAC.getData();
             jartpoz.Add(new poz(robotpoz.x, robotpoz.y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
@@ -204,8 +203,8 @@ namespace hazi2
             Canvas.SetLeft(porszivo, p.x - W);
             Canvas.SetTop(porszivo, p.y);
             string[,] tmp = new string[2, 5];
-            VacCleaner VAC = new VacCleaner(palya, robotpoz);
-            tmp = VAC.getData(irany.balra);
+            VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.balra);
+            tmp = VAC.getData();
             jartpoz.Add(new poz(robotpoz.x, robotpoz.y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
@@ -266,8 +265,8 @@ namespace hazi2
         private void alg1_Click(object sender, RoutedEventArgs e)
         {
             string[,] tmp = new string[2, 5];
-            VacCleaner VAC = new VacCleaner(palya, robotpoz);
-            tmp = VAC.getData(irany.jobbra);
+            VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.jobbra);
+            tmp = VAC.getData();
            
         }
         

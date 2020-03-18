@@ -10,7 +10,7 @@ namespace hazi2
 
      public interface Irobotinput
     {
-          string[,] getData(irany nez);
+          string[,] getData();
     }
 
    /* public interface Irobotoutput
@@ -21,17 +21,19 @@ namespace hazi2
     public class VacCleaner : Irobotinput /*, Irobotoutput */
     {
 
-        public VacCleaner(string [,] palya, poz aktpoz)
+        public VacCleaner(string [,] palya, poz aktpoz, irany nez)
         {
             this.palya = palya;
             this.aktpoz = aktpoz;
+            this.aktirany = nez;
         }
         
         string[,] palya;
         poz aktpoz;
+        irany aktirany;
 
         // A output interface még nem működik
-        /*  
+          
         public void leptet(irany nez)
         {
             switch (nez)
@@ -52,14 +54,14 @@ namespace hazi2
             
         }
 
-    */
+    
 
-        public string[,] getData (irany nez)
+        public string[,] getData ()
         {
             string[,] tmp = new string[2, 5];
             int k = 0;
             int l = 0;
-            switch (nez)
+            switch (this.aktirany)
             {
                 case irany.fel:
                     {
@@ -180,5 +182,4 @@ namespace hazi2
             return tmp;
         }
     }
-
 }
