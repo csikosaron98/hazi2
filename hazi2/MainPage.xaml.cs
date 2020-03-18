@@ -34,8 +34,9 @@ namespace hazi2
         const int W = 50;
         int j = 0;
         const int szobaterulet = (SOR - 2) * (OSZLOP - 2);
-        string[,] palya = new string[SOR, OSZLOP];
+        static string[,] palya = new string[SOR, OSZLOP];
         const int faldb = 2 * SOR + 2 * OSZLOP + (SOR + 4) + (OSZLOP + 4) + 10;
+
         public enum irany
         {
             fel,
@@ -53,7 +54,9 @@ namespace hazi2
                 this.y = y;
             }
         }
-        poz robotpoz;
+        VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.fel);
+
+        static poz robotpoz;
         List<poz> jartpoz = new List<poz>();  // dinamikus tárolóelem a bejárt területek tárolására
         poz[] falakpoz = new poz[faldb];
         public MainPage()
@@ -87,10 +90,12 @@ namespace hazi2
                     }
                     else if (alakzatvizsgal(palya[i, j]) == 1)
                     {
-                       
+
                         robotrajzol(x, y);
                         robotpoz.x = x;
                         robotpoz.y = y;
+                        VAC.setAktpoz(robotpoz);
+
                     }
                     x += W;
                 }
@@ -100,42 +105,43 @@ namespace hazi2
             }
         }
 
-        private void buttonelore_Click(object sender, RoutedEventArgs e)
+
+        public void buttonelore_Click(object sender, RoutedEventArgs e)
         {
-            robotfel(robotpoz);
+            robotfel(VAC.getAktpoz());
         }
         private void buttonbalra1_Click(object sender, RoutedEventArgs e)
         {
-            robotbal(robotpoz);
+            robotbal(VAC.getAktpoz());
         }
         private void buttonjobbra_Click(object sender, RoutedEventArgs e)
         {
-            robotjobb(robotpoz);
+            robotjobb(VAC.getAktpoz());
         }
         private void buttonhatra_Click(object sender, RoutedEventArgs e)
         {
-            robotle(robotpoz);
+            robotle(VAC.getAktpoz());
         }
         private void utkozes()
-         {
-             for (int i = 0; i < faldb; i++)
-             {
-                 if (Math.Abs(falakpoz[i].x-robotpoz.x) < W && Math.Abs(falakpoz[i].y - robotpoz.y) < H)
+        {
+            for (int i = 0; i < faldb; i++)
+            {
+                if (Math.Abs(falakpoz[i].x - VAC.getAktpoz().x) < W && Math.Abs(falakpoz[i].y - VAC.getAktpoz().y) < H)
                 {
                     porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
                 }
-             }
-         }
+            }
+        }
         int progressbarint = 0;
         private void progressbar()
         {
-                if (!jartpoz.Contains(robotpoz))
-                {
-                 progressbarint++;
-                 lefedettség.Value = progressbarint;   
-                }
+            if (!jartpoz.Contains(VAC.getAktpoz()))
+            {
+                progressbarint++;
+                lefedettség.Value = progressbarint;
+            }
         }
-     
+
         private void jart_kirajzol()
         {
             for (int i = j; i < jart_teglalapok.Count; i++)
@@ -155,60 +161,60 @@ namespace hazi2
         }
 
         // 4 irányba történő mozgatás, a bejárt területek folyamatos lementése, a progressbar növelése új terület érintésekor
-   
+
         public void robotfel(poz p)
         {
+            VAC.getData();
+            VAC.iranyvalt(irany.fel);
             Canvas.SetLeft(porszivo, p.x);
             Canvas.SetTop(porszivo, p.y - H);
-            string[,] tmp = new string[2, 5];
-            VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.fel);
-            tmp = VAC.getData();
-            jartpoz.Add(new poz(robotpoz.x, robotpoz.y));
+            jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
-            robotpoz.y = robotpoz.y - H;
+            VAC.leptet();
+
             progressbar();
             utkozes();
         }
         public void robotle(poz p)
         {
+            VAC.getData();
+            VAC.iranyvalt(irany.le);
             Canvas.SetLeft(porszivo, p.x);
             Canvas.SetTop(porszivo, p.y + H);
-            string[,] tmp = new string[2, 5];
-            VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.le);
-            tmp = VAC.getData();
-            jartpoz.Add(new poz(robotpoz.x, robotpoz.y));
+            jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
-            robotpoz.y = robotpoz.y + H;
+            VAC.leptet();
+
             progressbar();
             utkozes();
         }
         public void robotjobb(poz p)
         {
+            VAC.getData();
+            VAC.iranyvalt(irany.jobbra);
             Canvas.SetLeft(porszivo, p.x + W);
             Canvas.SetTop(porszivo, p.y);
-            string[,] tmp = new string[2, 5];
-            VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.jobbra);
-            tmp = VAC.getData();
-            jartpoz.Add(new poz(robotpoz.x, robotpoz.y));
+            jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
-            robotpoz.x = robotpoz.x + W;
+            VAC.leptet();
+
             progressbar();
             utkozes();
         }
         public void robotbal(poz p)
         {
+            VAC.getData();
+            VAC.iranyvalt(irany.balra);
             Canvas.SetLeft(porszivo, p.x - W);
             Canvas.SetTop(porszivo, p.y);
-            string[,] tmp = new string[2, 5];
-            VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.balra);
-            tmp = VAC.getData();
-            jartpoz.Add(new poz(robotpoz.x, robotpoz.y));
+            jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
-            robotpoz.x = robotpoz.x - W;
+            VAC.leptet();
+
             progressbar();
             utkozes();
         }
@@ -242,7 +248,7 @@ namespace hazi2
 
             Canvas.SetLeft(porszivo, x);
             Canvas.SetTop(porszivo, y);
-            Canvas.SetZIndex(porszivo,1);
+            Canvas.SetZIndex(porszivo, 1);
         }
 
         //alakzatvizsgálás a txt-hez -> o: fal, x: robot
@@ -261,15 +267,13 @@ namespace hazi2
             lefedettség.Maximum = szobaterulet;
             lefedettség.Value = progressbarint;
         }
-        
+
         private void alg1_Click(object sender, RoutedEventArgs e)
         {
-            string[,] tmp = new string[2, 5];
-            VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.jobbra);
-            tmp = VAC.getData();
-           
+            VAC.getData();
+
         }
-        
+
     }
 
 }
