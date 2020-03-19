@@ -17,6 +17,8 @@ namespace hazi2
     {
         void leptet();
         void iranyvalt(irany nez);
+        void jobbra();
+        void balra();
     }
 
     public class VacCleaner : Irobotinput, Irobotoutput
@@ -28,20 +30,21 @@ namespace hazi2
             this.aktpoz = aktpoz;
             this.aktirany = nez;
         }
-       
+
         //konstansok
 
         const int SOR = 12;
         const int OSZLOP = 12;
         const int H = 50;
         const int W = 50;
-        
+
         //tagváltozók
 
         string[,] palya;
         poz aktpoz;
         irany aktirany;
         static string[,] mem = new string[SOR, OSZLOP];
+        static string[,] sensor = new string[2, 5];
         public void setAktpoz(poz p)
         {
             this.aktpoz = p;
@@ -49,6 +52,14 @@ namespace hazi2
         public poz getAktpoz()
         {
             return this.aktpoz;
+        }
+        public string[,] getSensor()
+        {
+            return sensor;
+        }
+        public string[,] getMem()
+        {
+            return mem;
         }
 
         //tagfüggvények
@@ -76,9 +87,64 @@ namespace hazi2
         {
             this.aktirany = nez;
         }
+        public void jobbra()
+        {
+            switch (aktirany)
+            {
+                case irany.fel:
+                    {
+                        this.iranyvalt(irany.jobbra);
+                    }
+                    break;
+                case irany.le:
+                    {
+                        this.iranyvalt(irany.balra);
+                    }
+                    break;
+                case irany.jobbra:
+                    {
+                        this.iranyvalt(irany.le);
+                    }
+                    break;
+                case irany.balra:
+                    {
+                        this.iranyvalt(irany.fel);
+                    }
+                    break;
+
+            }
+
+        }
+        public void balra()
+        {
+            switch (aktirany)
+            {
+                case irany.fel:
+                    {
+                        this.iranyvalt(irany.balra);
+                    }
+                    break;
+                case irany.le:
+                    {
+                        this.iranyvalt(irany.jobbra);
+                    }
+                    break;
+                case irany.jobbra:
+                    {
+                        this.iranyvalt(irany.fel);
+                    }
+                    break;
+                case irany.balra:
+                    {
+                        this.iranyvalt(irany.le);
+                    }
+                    break;
+
+            }
+
+        }
         public void getData()
         {
-            string[,] tmp = new string[2, 5];
             int k = 0;
             int l = 0;
             switch (aktirany)
@@ -86,30 +152,30 @@ namespace hazi2
                 case irany.fel:
                     {
                         int oszlop = (this.aktpoz.x - 200) / 50 - 2;
-                        int sor = (this.aktpoz.y - 50) / 50 - 1;
+                        int sor = (this.aktpoz.y) / 50 - 1;
                         for (int i = sor; i > sor - 2; i--)
                         {
                             for (int j = oszlop; j < oszlop + 5; j++)
                             {
-                                tmp[k, l] = palya[i, j];
+                                sensor[k, l] = palya[i, j];
                                 mem[i, j] = palya[i, j];
                                 l++;
                             }
                             l = 0;
                             k++;
                         }
-                        tmp[0, 0] = "?";
-                        tmp[0, 4] = "?";
-                        if (tmp[0, 1] == "o")
-                            tmp[1, 0] = "?";
-                        if (tmp[0, 2] == "o")
-                            tmp[1, 2] = "?";
-                        if (tmp[0, 3] == "o")
-                            tmp[1, 4] = "?";
-                        if (tmp[0, 1] == "o" && tmp[0, 2] == "o")
-                            tmp[1, 1] = "?";
-                        if (tmp[0, 2] == "o" && tmp[0, 3] == "o")
-                            tmp[1, 3] = "?";
+                        sensor[0, 0] = "?";
+                        sensor[0, 4] = "?";
+                        if (sensor[0, 1] == "o")
+                            sensor[1, 0] = "?";
+                        if (sensor[0, 2] == "o")
+                            sensor[1, 2] = "?";
+                        if (sensor[0, 3] == "o")
+                            sensor[1, 4] = "?";
+                        if (sensor[0, 1] == "o" && sensor[0, 2] == "o")
+                            sensor[1, 1] = "?";
+                        if (sensor[0, 2] == "o" && sensor[0, 3] == "o")
+                            sensor[1, 3] = "?";
                     }
                     break;
                 case irany.le:
@@ -121,25 +187,25 @@ namespace hazi2
                             for (int j = oszlop; j > oszlop - 5; j--)
                             {
 
-                                tmp[k, l] = palya[i, j];
+                                sensor[k, l] = palya[i, j];
                                 l++;
                                 mem[i, j] = palya[i, j];
                             }
                             l = 0;
                             k++;
                         }
-                        tmp[0, 0] = "?";
-                        tmp[0, 4] = "?";
-                        if (tmp[0, 1] == "o")
-                            tmp[1, 0] = "?";
-                        if (tmp[0, 2] == "o")
-                            tmp[1, 2] = "?";
-                        if (tmp[0, 3] == "o")
-                            tmp[1, 4] = "?";
-                        if (tmp[0, 1] == "o" && tmp[0, 2] == "o")
-                            tmp[1, 1] = "?";
-                        if (tmp[0, 2] == "o" && tmp[0, 3] == "o")
-                            tmp[1, 3] = "?";
+                        sensor[0, 0] = "?";
+                        sensor[0, 4] = "?";
+                        if (sensor[0, 1] == "o")
+                            sensor[1, 0] = "?";
+                        if (sensor[0, 2] == "o")
+                            sensor[1, 2] = "?";
+                        if (sensor[0, 3] == "o")
+                            sensor[1, 4] = "?";
+                        if (sensor[0, 1] == "o" && sensor[0, 2] == "o")
+                            sensor[1, 1] = "?";
+                        if (sensor[0, 2] == "o" && sensor[0, 3] == "o")
+                            sensor[1, 3] = "?";
                     }
                     break;
                 case irany.jobbra:
@@ -151,25 +217,25 @@ namespace hazi2
                             for (int i = sor; i < sor + 5; i++)
                             {
 
-                                tmp[k, l] = palya[i, j];
+                                sensor[k, l] = palya[i, j];
                                 mem[i, j] = palya[i, j];
                                 l++;
                             }
                             l = 0;
                             k++;
                         }
-                        tmp[0, 0] = "?";
-                        tmp[0, 4] = "?";
-                        if (tmp[0, 1] == "o")
-                            tmp[1, 0] = "?";
-                        if (tmp[0, 2] == "o")
-                            tmp[1, 2] = "?";
-                        if (tmp[0, 3] == "o")
-                            tmp[1, 4] = "?";
-                        if (tmp[0, 1] == "o" && tmp[0, 2] == "o")
-                            tmp[1, 1] = "?";
-                        if (tmp[0, 2] == "o" && tmp[0, 3] == "o")
-                            tmp[1, 3] = "?";
+                        sensor[0, 0] = "?";
+                        sensor[0, 4] = "?";
+                        if (sensor[0, 1] == "o")
+                            sensor[1, 0] = "?";
+                        if (sensor[0, 2] == "o")
+                            sensor[1, 2] = "?";
+                        if (sensor[0, 3] == "o")
+                            sensor[1, 4] = "?";
+                        if (sensor[0, 1] == "o" && sensor[0, 2] == "o")
+                            sensor[1, 1] = "?";
+                        if (sensor[0, 2] == "o" && sensor[0, 3] == "o")
+                            sensor[1, 3] = "?";
                     }
                     break;
                 case irany.balra:
@@ -181,25 +247,25 @@ namespace hazi2
                             for (int i = sor; i > sor - 5; i--)
                             {
 
-                                tmp[k, l] = palya[i, j];
+                                sensor[k, l] = palya[i, j];
                                 mem[i, j] = palya[i, j];
                                 l++;
                             }
                             l = 0;
                             k++;
                         }
-                        tmp[0, 0] = "?";
-                        tmp[0, 4] = "?";
-                        if (tmp[0, 1] == "o")
-                            tmp[1, 0] = "?";
-                        if (tmp[0, 2] == "o")
-                            tmp[1, 2] = "?";
-                        if (tmp[0, 3] == "o")
-                            tmp[1, 4] = "?";
-                        if (tmp[0, 1] == "o" && tmp[0, 2] == "o")
-                            tmp[1, 1] = "?";
-                        if (tmp[0, 2] == "o" && tmp[0, 3] == "o")
-                            tmp[1, 3] = "?";
+                        sensor[0, 0] = "?";
+                        sensor[0, 4] = "?";
+                        if (sensor[0, 1] == "o")
+                            sensor[1, 0] = "?";
+                        if (sensor[0, 2] == "o")
+                            sensor[1, 2] = "?";
+                        if (sensor[0, 3] == "o")
+                            sensor[1, 4] = "?";
+                        if (sensor[0, 1] == "o" && sensor[0, 2] == "o")
+                            sensor[1, 1] = "?";
+                        if (sensor[0, 2] == "o" && sensor[0, 3] == "o")
+                            sensor[1, 3] = "?";
                     }
                     break;
             }

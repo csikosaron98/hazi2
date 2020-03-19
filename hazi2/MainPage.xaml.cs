@@ -58,6 +58,7 @@ namespace hazi2
         }
         VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.fel);
 
+
         static poz robotpoz;
         List<poz> jartpoz = new List<poz>();  // dinamikus tárolóelem a bejárt területek tárolására
         poz[] falakpoz = new poz[faldb];
@@ -115,6 +116,35 @@ namespace hazi2
                 {
                     porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
                     x = 1;
+                    break;
+                }
+                else
+                    x = 0;
+            }
+            return x;
+        }
+        public int VACutkozes()
+        {
+            int x = 0;
+            int k = 0;
+            List<poz> sens = new List<poz>();
+            for (int i = 0; i < SOR; i++)
+                for (int j = 0; j < OSZLOP; j++)
+                {
+                    if (alakzatvizsgal(VAC.getMem()[i, j]) == 0)
+                    {
+                        sens.Add(new poz(j * W, (i * H) + 200));
+                        k++;
+                    }
+                }
+
+            for (int i = 0; i < sens.Count; i++)
+            {
+                if (Math.Abs(VAC.getAktpoz().x - sens[i].x) < W && Math.Abs(VAC.getAktpoz().y - sens[i].y) < H)
+                {
+                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                    x = 1;
+                    break;
                 }
                 else
                     x = 0;
@@ -137,7 +167,7 @@ namespace hazi2
         {
             robotle(VAC.getAktpoz());
         }
-        
+
         int progressbarint = 0;
         private void progressbar()
         {
@@ -207,7 +237,7 @@ namespace hazi2
             VAC.leptet();
 
             progressbar();
-           // utkozes();
+            // utkozes();
         }
         public void robotbal(poz p)
         {
@@ -221,7 +251,7 @@ namespace hazi2
             VAC.leptet();
 
             progressbar();
-           //utkozes();
+            //utkozes();
         }
 
         //falak kirajzolása -> kék négyzet
@@ -273,36 +303,39 @@ namespace hazi2
             lefedettség.Value = progressbarint;
         }
 
-        public void VACrajzol ()
+        public void VACrajzol()
         {
             Canvas.SetLeft(porszivo, (VAC.getAktpoz().x));
             Canvas.SetTop(porszivo, (VAC.getAktpoz().y));
         }
 
-        /*
-        public void algoritmus1()
+
+        public async void algoritmus1()
         {
-            int milisec = 1000;
-            VAC.leptet();
-            VACrajzol();
-            //await Task.Delay(milisec);
-            VAC.leptet();
-            VACrajzol();
-            //await Task.Delay(milisec);
-            Thread.Sleep(milisec);
-            VAC.leptet();
-            VACrajzol();
-            //await Task.Delay(milisec);
-            Thread.Sleep(milisec);
-            VAC.leptet();
-            VACrajzol();
+            int milisec = 500;
+            while (true)
+            {
+                VAC.getData();
+                VAC.leptet();
+                VAC.getData();
+
+                VACrajzol();
+                await Task.Delay(milisec);
+                if (VACutkozes() == 1)
+                {
+                    VAC.jobbra();
+                }
+
+
+            }
         }
-        */
+
         private void alg1_Click(object sender, RoutedEventArgs e)
         {
-            //algoritmus1();
+            VAC.getData();
+            algoritmus1();
         }
-        
+
     }
 
 }
