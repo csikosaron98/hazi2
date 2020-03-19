@@ -28,11 +28,14 @@ namespace hazi2
             this.aktpoz = aktpoz;
             this.aktirany = nez;
         }
+       
         //konstansok
+
         const int SOR = 12;
         const int OSZLOP = 12;
         const int H = 50;
         const int W = 50;
+        
         //tagváltozók
 
         string[,] palya;
@@ -73,16 +76,11 @@ namespace hazi2
         {
             this.aktirany = nez;
         }
-
-
-
         public void getData()
         {
             string[,] tmp = new string[2, 5];
             int k = 0;
             int l = 0;
-            int kindex = 0;
-            int lindex = 0;
             switch (aktirany)
             {
                 case irany.fel:
@@ -205,9 +203,6 @@ namespace hazi2
                     }
                     break;
             }
-
-
-
         }
     }
 

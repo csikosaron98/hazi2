@@ -13,6 +13,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
+using System.Threading;
+using System.Threading.Tasks;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -33,7 +35,7 @@ namespace hazi2
         const int H = 50;
         const int W = 50;
         int j = 0;
-        const int szobaterulet = (SOR - 2) * (OSZLOP - 2);
+        const int szobaterulet = (SOR - 4) * (OSZLOP - 4);
         static string[,] palya = new string[SOR, OSZLOP];
         const int faldb = 2 * SOR + 2 * OSZLOP + (SOR + 4) + (OSZLOP + 4) + 10;
 
@@ -104,8 +106,21 @@ namespace hazi2
                 y += H;
             }
         }
-
-
+        public int utkozes()
+        {
+            int x = 0;
+            for (int i = 0; i < faldb; i++)
+            {
+                if (Math.Abs(falakpoz[i].x - VAC.getAktpoz().x) < W && Math.Abs(falakpoz[i].y - VAC.getAktpoz().y) < H)
+                {
+                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                    x = 1;
+                }
+                else
+                    x = 0;
+            }
+            return x;
+        }
         public void buttonelore_Click(object sender, RoutedEventArgs e)
         {
             robotfel(VAC.getAktpoz());
@@ -122,16 +137,7 @@ namespace hazi2
         {
             robotle(VAC.getAktpoz());
         }
-        private void utkozes()
-        {
-            for (int i = 0; i < faldb; i++)
-            {
-                if (Math.Abs(falakpoz[i].x - VAC.getAktpoz().x) < W && Math.Abs(falakpoz[i].y - VAC.getAktpoz().y) < H)
-                {
-                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
-                }
-            }
-        }
+        
         int progressbarint = 0;
         private void progressbar()
         {
@@ -161,7 +167,6 @@ namespace hazi2
         }
 
         // 4 irányba történő mozgatás, a bejárt területek folyamatos lementése, a progressbar növelése új terület érintésekor
-
         public void robotfel(poz p)
         {
             VAC.getData();
@@ -174,7 +179,7 @@ namespace hazi2
             VAC.leptet();
 
             progressbar();
-            utkozes();
+            //utkozes();
         }
         public void robotle(poz p)
         {
@@ -188,7 +193,7 @@ namespace hazi2
             VAC.leptet();
 
             progressbar();
-            utkozes();
+            //utkozes();
         }
         public void robotjobb(poz p)
         {
@@ -202,7 +207,7 @@ namespace hazi2
             VAC.leptet();
 
             progressbar();
-            utkozes();
+           // utkozes();
         }
         public void robotbal(poz p)
         {
@@ -216,7 +221,7 @@ namespace hazi2
             VAC.leptet();
 
             progressbar();
-            utkozes();
+           //utkozes();
         }
 
         //falak kirajzolása -> kék négyzet
@@ -268,12 +273,36 @@ namespace hazi2
             lefedettség.Value = progressbarint;
         }
 
-        private void alg1_Click(object sender, RoutedEventArgs e)
+        public void VACrajzol ()
         {
-            VAC.getData();
-
+            Canvas.SetLeft(porszivo, (VAC.getAktpoz().x));
+            Canvas.SetTop(porszivo, (VAC.getAktpoz().y));
         }
 
+        /*
+        public void algoritmus1()
+        {
+            int milisec = 1000;
+            VAC.leptet();
+            VACrajzol();
+            //await Task.Delay(milisec);
+            VAC.leptet();
+            VACrajzol();
+            //await Task.Delay(milisec);
+            Thread.Sleep(milisec);
+            VAC.leptet();
+            VACrajzol();
+            //await Task.Delay(milisec);
+            Thread.Sleep(milisec);
+            VAC.leptet();
+            VACrajzol();
+        }
+        */
+        private void alg1_Click(object sender, RoutedEventArgs e)
+        {
+            //algoritmus1();
+        }
+        
     }
 
 }
