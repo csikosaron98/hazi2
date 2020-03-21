@@ -86,7 +86,7 @@ namespace hazi2
                 {
                     if (alakzatvizsgal(palya[i, j]) == 0)
                     {
-                        falrajzol(palya, x, y); //x=200tol 1450ig, y=0 tol 700 ig
+                        falrajzol(palya, x, y); //x=200tol 1450ig, y=50 tol 700 ig
                         falakpoz[k].x = x;
                         falakpoz[k].y = y;
                         k++;
@@ -125,26 +125,138 @@ namespace hazi2
         }
         public int VACutkozes()
         {
+            int oszlop = 0;
+            int sor = 0;
             int x = 0;
-            int k = 0;
+
             List<poz> sens = new List<poz>();
-            for (int i = 0; i < SOR; i++)
-                for (int j = 0; j < OSZLOP; j++)
-                {
-                    if (alakzatvizsgal(VAC.getMem()[i, j]) == 0)
+            switch (VAC.getIrany())
+            {
+                case irany.fel:
                     {
-                        sens.Add(new poz(j * W, (i * H) + 200));
-                        k++;
+                        oszlop = (VAC.getAktpoz().x - 200) / 50 - 2;
+                        sor = (VAC.getAktpoz().y - 50) / 50 - 1;
+                        for (int i = sor; i > sor - 2; i--)
+                        {
+                            for (int j = oszlop; j < oszlop + 5; j++)
+                            {
+                                if (alakzatvizsgal(VAC.getSensor()[i, j]) == 0)
+                                {
+                                    sens.Add(new poz((j * W) + 200, (i * H) + 50));
+
+                                }
+                            }
+
+                        }
                     }
+                    break;
+                case irany.le:
+                    {
+                        oszlop = (VAC.getAktpoz().x - 200) / 50 + 2;
+                        sor = (VAC.getAktpoz().y - 50) / 50 + 1;
+                        for (int i = sor; i < sor + 2; i++)
+                        {
+                            for (int j = oszlop; j > oszlop - 5; j--)
+                            {
+
+                                if (alakzatvizsgal(VAC.getSensor()[i, j]) == 0)
+                                {
+                                    sens.Add(new poz((j * W) + 200, (i * H) + 50));
+
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case irany.jobbra:
+                    {
+                        oszlop = (VAC.getAktpoz().x - 200) / 50 + 1;
+                        sor = (VAC.getAktpoz().y - 50) / 50 - 2;
+                        for (int j = oszlop; j < oszlop + 2; j++)
+                        {
+                            for (int i = sor; i < sor + 5; i++)
+                            {
+
+                                if (alakzatvizsgal(VAC.getSensor()[i, j]) == 0)
+                                {
+                                    sens.Add(new poz((j * W) + 200, (i * H) + 50));
+
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case irany.balra:
+                    {
+                        oszlop = (VAC.getAktpoz().x - 200) / 50 - 1;
+                        sor = (VAC.getAktpoz().y - 50) / 50 + 2;
+                        for (int j = oszlop; j > oszlop - 2; j--)
+                        {
+                            for (int i = sor; i > sor - 5; i--)
+                            {
+
+                                if (alakzatvizsgal(VAC.getSensor()[i, j]) == 0)
+                                {
+                                    sens.Add(new poz((j * W) + 200, (i * H) + 50));
+
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+            for (int i = 0; i < sor; i++)
+                for (int j = 0; j < oszlop; j++)
+                {
+
                 }
 
             for (int i = 0; i < sens.Count; i++)
             {
-                if (Math.Abs(VAC.getAktpoz().x - sens[i].x) < W && Math.Abs(VAC.getAktpoz().y - sens[i].y) < H)
+                if (Math.Abs(VAC.getAktpoz().x - sens[i].x) < 2 * W && Math.Abs(VAC.getAktpoz().y - sens[i].y) < 2 * H)
                 {
-                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
-                    x = 1;
-                    break;
+                    switch (VAC.getIrany())
+                    {
+                        case irany.fel:
+                            {
+                                if (sens[i].x == VAC.getAktpoz().x)
+                                {
+                                    x = 1;
+                                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                                }
+                            }
+                            break;
+                        case irany.le:
+                            {
+                                if (sens[i].x == VAC.getAktpoz().x)
+                                {
+                                    x = 1;
+                                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                                }
+                            }
+                            break;
+                        case irany.jobbra:
+                            {
+                                if (sens[i].y == VAC.getAktpoz().y)
+                                {
+                                    x = 1;
+                                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                                }
+                            }
+                            break;
+                        case irany.balra:
+                            {
+                                if (sens[i].y == VAC.getAktpoz().y)
+                                {
+                                    x = 1;
+                                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                                }
+                            }
+                            break;
+                    }
+
+
+
                 }
                 else
                     x = 0;
@@ -316,15 +428,24 @@ namespace hazi2
             while (true)
             {
                 VAC.getData();
-                VAC.leptet();
-                VAC.getData();
-
-                VACrajzol();
-                await Task.Delay(milisec);
                 if (VACutkozes() == 1)
                 {
                     VAC.jobbra();
+                    VAC.getData();
+
                 }
+                VAC.leptet();
+                VACrajzol();
+                await Task.Delay(milisec);
+
+
+
+
+
+                VAC.getData();
+
+
+                VAC.getData();
 
 
             }
@@ -332,7 +453,7 @@ namespace hazi2
 
         private void alg1_Click(object sender, RoutedEventArgs e)
         {
-            VAC.getData();
+            //VAC.getData();
             algoritmus1();
         }
 

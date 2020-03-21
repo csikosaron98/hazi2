@@ -61,6 +61,10 @@ namespace hazi2
         {
             return mem;
         }
+        public irany getIrany()
+        {
+            return this.aktirany;
+        }
 
         //tagfüggvények
 
@@ -152,7 +156,7 @@ namespace hazi2
                 case irany.fel:
                     {
                         int oszlop = (this.aktpoz.x - 200) / 50 - 2;
-                        int sor = (this.aktpoz.y) / 50 - 1;
+                        int sor = (this.aktpoz.y - 50) / 50 - 1;
                         for (int i = sor; i > sor - 2; i--)
                         {
                             for (int j = oszlop; j < oszlop + 5; j++)
