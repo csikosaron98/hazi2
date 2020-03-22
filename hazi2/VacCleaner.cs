@@ -8,6 +8,7 @@ using static hazi2.MainPage;
 namespace hazi2
 {
 
+    // két Interface: bemenet(szenzor), kimenet(motor)
     public interface Irobotinput
     {
         void getData();
@@ -23,7 +24,6 @@ namespace hazi2
 
     public class VacCleaner : Irobotinput, Irobotoutput
     {
-
         public VacCleaner(string[,] palya, poz aktpoz, irany nez)
         {
             this.palya = palya;
@@ -45,6 +45,8 @@ namespace hazi2
         irany aktirany;
         static string[,] mem = new string[SOR, OSZLOP];
         static string[,] sensor = new string[2, 5];
+
+        //setterek, getterek
         public void setAktpoz(poz p)
         {
             this.aktpoz = p;
@@ -85,7 +87,6 @@ namespace hazi2
                     this.aktpoz.x = this.aktpoz.x - W;
                     break;
             }
-
         }
         public void iranyvalt(irany nez)
         {
@@ -115,9 +116,7 @@ namespace hazi2
                         this.iranyvalt(irany.fel);
                     }
                     break;
-
             }
-
         }
         public void balra()
         {
@@ -143,9 +142,7 @@ namespace hazi2
                         this.iranyvalt(irany.le);
                     }
                     break;
-
             }
-
         }
         public void getData()
         {
@@ -275,5 +272,4 @@ namespace hazi2
             }
         }
     }
-
 }

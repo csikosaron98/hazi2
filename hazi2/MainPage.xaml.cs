@@ -107,7 +107,7 @@ namespace hazi2
                 y += H;
             }
         }
-        public int utkozes()
+       /* public int utkozes()
         {
             int x = 0;
             for (int i = 0; i < faldb; i++)
@@ -122,36 +122,40 @@ namespace hazi2
                     x = 0;
             }
             return x;
-        }
+        }*/
         public int VACutkozes()
         {
             int oszlop = 0;
             int sor = 0;
             int x = 0;
-
             List<poz> sens = new List<poz>();
             switch (VAC.getIrany())
             {
                 case irany.fel:
                     {
+                        int k = 0;
+                        int l = 0;
                         oszlop = (VAC.getAktpoz().x - 200) / 50 - 2;
                         sor = (VAC.getAktpoz().y - 50) / 50 - 1;
                         for (int i = sor; i > sor - 2; i--)
                         {
                             for (int j = oszlop; j < oszlop + 5; j++)
                             {
-                                if (alakzatvizsgal(VAC.getSensor()[i, j]) == 0)
+                                if (alakzatvizsgal(VAC.getSensor()[k, l]) == 0)
                                 {
                                     sens.Add(new poz((j * W) + 200, (i * H) + 50));
-
                                 }
+                                l++;
                             }
-
+                            l = 0;
+                            k++;
                         }
                     }
                     break;
                 case irany.le:
                     {
+                        int k = 0;
+                        int l = 0;
                         oszlop = (VAC.getAktpoz().x - 200) / 50 + 2;
                         sor = (VAC.getAktpoz().y - 50) / 50 + 1;
                         for (int i = sor; i < sor + 2; i++)
@@ -159,17 +163,21 @@ namespace hazi2
                             for (int j = oszlop; j > oszlop - 5; j--)
                             {
 
-                                if (alakzatvizsgal(VAC.getSensor()[i, j]) == 0)
+                                if (alakzatvizsgal(VAC.getSensor()[k, l]) == 0)
                                 {
                                     sens.Add(new poz((j * W) + 200, (i * H) + 50));
-
                                 }
+                                l++;
                             }
+                            l = 0;
+                            k++;
                         }
                     }
                     break;
                 case irany.jobbra:
                     {
+                        int k = 0;
+                        int l = 0;
                         oszlop = (VAC.getAktpoz().x - 200) / 50 + 1;
                         sor = (VAC.getAktpoz().y - 50) / 50 - 2;
                         for (int j = oszlop; j < oszlop + 2; j++)
@@ -177,17 +185,21 @@ namespace hazi2
                             for (int i = sor; i < sor + 5; i++)
                             {
 
-                                if (alakzatvizsgal(VAC.getSensor()[i, j]) == 0)
+                                if (alakzatvizsgal(VAC.getSensor()[k, l]) == 0)
                                 {
                                     sens.Add(new poz((j * W) + 200, (i * H) + 50));
-
                                 }
+                                l++;
                             }
+                            l = 0;
+                            k++;
                         }
                     }
                     break;
                 case irany.balra:
                     {
+                        int k = 0;
+                        int l = 0;
                         oszlop = (VAC.getAktpoz().x - 200) / 50 - 1;
                         sor = (VAC.getAktpoz().y - 50) / 50 + 2;
                         for (int j = oszlop; j > oszlop - 2; j--)
@@ -195,22 +207,18 @@ namespace hazi2
                             for (int i = sor; i > sor - 5; i--)
                             {
 
-                                if (alakzatvizsgal(VAC.getSensor()[i, j]) == 0)
+                                if (alakzatvizsgal(VAC.getSensor()[k, l]) == 0)
                                 {
                                     sens.Add(new poz((j * W) + 200, (i * H) + 50));
-
                                 }
+                                l++;
                             }
+                            l = 0;
+                            k++;
                         }
                     }
                     break;
             }
-            for (int i = 0; i < sor; i++)
-                for (int j = 0; j < oszlop; j++)
-                {
-
-                }
-
             for (int i = 0; i < sens.Count; i++)
             {
                 if (Math.Abs(VAC.getAktpoz().x - sens[i].x) < 2 * W && Math.Abs(VAC.getAktpoz().y - sens[i].y) < 2 * H)
@@ -222,7 +230,7 @@ namespace hazi2
                                 if (sens[i].x == VAC.getAktpoz().x)
                                 {
                                     x = 1;
-                                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                                   // porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
                                 }
                             }
                             break;
@@ -231,7 +239,7 @@ namespace hazi2
                                 if (sens[i].x == VAC.getAktpoz().x)
                                 {
                                     x = 1;
-                                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                                    //porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
                                 }
                             }
                             break;
@@ -240,7 +248,7 @@ namespace hazi2
                                 if (sens[i].y == VAC.getAktpoz().y)
                                 {
                                     x = 1;
-                                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                                   // porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
                                 }
                             }
                             break;
@@ -249,17 +257,19 @@ namespace hazi2
                                 if (sens[i].y == VAC.getAktpoz().y)
                                 {
                                     x = 1;
-                                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                                    //porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
                                 }
                             }
                             break;
                     }
-
-
-
                 }
                 else
-                    x = 0;
+                {
+                    if (x != 1)
+                    {
+                        x = 0;
+                    }
+                }
             }
             return x;
         }
@@ -419,6 +429,9 @@ namespace hazi2
         {
             Canvas.SetLeft(porszivo, (VAC.getAktpoz().x));
             Canvas.SetTop(porszivo, (VAC.getAktpoz().y));
+            jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
+            jart_teglalapok.Add(new Rectangle());
+            jart_kirajzol();
         }
 
 
@@ -432,28 +445,16 @@ namespace hazi2
                 {
                     VAC.jobbra();
                     VAC.getData();
-
                 }
-                VAC.leptet();
                 VACrajzol();
+                VAC.leptet();
+                progressbar();
                 await Task.Delay(milisec);
-
-
-
-
-
-                VAC.getData();
-
-
-                VAC.getData();
-
-
             }
         }
 
         private void alg1_Click(object sender, RoutedEventArgs e)
         {
-            //VAC.getData();
             algoritmus1();
         }
 
