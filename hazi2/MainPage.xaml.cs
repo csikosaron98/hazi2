@@ -35,10 +35,9 @@ namespace hazi2
         const int H = 50;
         const int W = 50;
         int j = 0;
-        const int szobaterulet = (SOR - 4) * (OSZLOP - 4);
+        int szobaterulet = 1;
         static string[,] palya = new string[SOR, OSZLOP];
-        const int faldb = 2 * SOR + 2 * OSZLOP + (SOR + 4) + (OSZLOP + 4) + 10;
-
+        const int faldb = 2 * SOR + 2 * OSZLOP + 2 * (SOR - 4) + 2 * (OSZLOP - 4);
         public enum irany
         {
             fel,
@@ -61,7 +60,7 @@ namespace hazi2
 
         static poz robotpoz;
         List<poz> jartpoz = new List<poz>();  // dinamikus tárolóelem a bejárt területek tárolására
-        poz[] falakpoz = new poz[faldb];
+        poz[] falakpoz = new poz[100];
         public MainPage()
         {
             this.InitializeComponent();
@@ -89,7 +88,7 @@ namespace hazi2
                         falrajzol(palya, x, y); //x=200tol 1450ig, y=50 tol 700 ig
                         falakpoz[k].x = x;
                         falakpoz[k].y = y;
-                        k++;
+                        k++;                      
                     }
                     else if (alakzatvizsgal(palya[i, j]) == 1)
                     {
@@ -98,7 +97,10 @@ namespace hazi2
                         robotpoz.x = x;
                         robotpoz.y = y;
                         VAC.setAktpoz(robotpoz);
-
+                    }
+                    else if (alakzatvizsgal(palya[i,j]) == 2)
+                    {
+                        szobaterulet++;
                     }
                     x += W;
                 }
@@ -107,22 +109,22 @@ namespace hazi2
                 y += H;
             }
         }
-       /* public int utkozes()
-        {
-            int x = 0;
-            for (int i = 0; i < faldb; i++)
-            {
-                if (Math.Abs(falakpoz[i].x - VAC.getAktpoz().x) < W && Math.Abs(falakpoz[i].y - VAC.getAktpoz().y) < H)
-                {
-                    porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
-                    x = 1;
-                    break;
-                }
-                else
-                    x = 0;
-            }
-            return x;
-        }*/
+        /* public int utkozes()
+         {
+             int x = 0;
+             for (int i = 0; i < faldb; i++)
+             {
+                 if (Math.Abs(falakpoz[i].x - VAC.getAktpoz().x) < W && Math.Abs(falakpoz[i].y - VAC.getAktpoz().y) < H)
+                 {
+                     porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                     x = 1;
+                     break;
+                 }
+                 else
+                     x = 0;
+             }
+             return x;
+         }*/
         public int VACutkozes()
         {
             int oszlop = 0;
@@ -415,8 +417,10 @@ namespace hazi2
                 return 0;
             else if (s == "x")
                 return 1;
-            else
+            else if (s == ".")
                 return 2;
+            else
+                return 3;
         }
 
         private void lefedettség_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
