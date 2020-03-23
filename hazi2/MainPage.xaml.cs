@@ -410,7 +410,7 @@ namespace hazi2
             Canvas.SetZIndex(porszivo, 1);
         }
 
-        //alakzatvizsgálás a txt-hez -> o: fal, x: robot
+        //alakzatvizsgálás a txt-hez -> o: fal, x: robot, .: semmi
         private int alakzatvizsgal(string s)
         {
             if (s == "o")
@@ -431,6 +431,7 @@ namespace hazi2
 
         public void VACrajzol()
         {
+            progressbar();
             Canvas.SetLeft(porszivo, (VAC.getAktpoz().x));
             Canvas.SetTop(porszivo, (VAC.getAktpoz().y));
             jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
@@ -444,15 +445,24 @@ namespace hazi2
             int milisec = 500;
             while (true)
             {
+                Random r = new Random();
+                int genRand = r.Next(1, 10);
                 VAC.getData();
-                if (VACutkozes() == 1)
-                {
-                    VAC.jobbra();
+                VACrajzol();
+                if (VACutkozes() == 1) //hiba:gyakoribb VACutkozes vizsgálat kellene
+                {                
+                    if (genRand <= 5)
+                    {
+                        VAC.jobbra();
+                    }
+                    else if (genRand >= 5)
+                    {
+                        VAC.balra();
+                    }
                     VAC.getData();
                 }
-                VACrajzol();
                 VAC.leptet();
-                progressbar();
+                VACrajzol();
                 await Task.Delay(milisec);
             }
         }
