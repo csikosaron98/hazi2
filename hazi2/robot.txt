@@ -1,12 +1,12 @@
 oooooooooooo
 oooooooooooo
 oo........oo
-oo....o...oo
 oo........oo
-oo.o......oo
-oo.....o..oo
-oo.x......oo
 oo........oo
-oo...o....oo
+oo........oo
+oo........oo
+oox.......oo
+oo........oo
+oo........oo
 oooooooooooo
 oooooooooooo

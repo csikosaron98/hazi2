@@ -26,15 +26,25 @@ namespace hazi2
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        List<poz> input = new List<poz>();
+        // változók
+
+        //List<poz> input = new List<poz>(); 
+        poz[] falakpoz = new poz[100];
+        List<poz> jartpoz = new List<poz>();  // dinamikus tárolóelem a bejárt területek tárolására
+        List<Rectangle> jart_teglalapok = new List<Rectangle>();
+
         Rectangle porszivo = new Rectangle();
         Rectangle jart = new Rectangle();
-        List<Rectangle> jart_teglalapok = new List<Rectangle>();
+
+        static poz robotpoz;
+        VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.fel);
+
         const int SOR = 12;
         const int OSZLOP = 12;
         const int H = 50;
         const int W = 50;
         int j = 0;
+        int progressbarint = 0;
         int szobaterulet = 1;
         static string[,] palya = new string[SOR, OSZLOP];
         const int faldb = 2 * SOR + 2 * OSZLOP + 2 * (SOR - 4) + 2 * (OSZLOP - 4);
@@ -55,12 +65,7 @@ namespace hazi2
                 this.y = y;
             }
         }
-        VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.fel);
 
-
-        static poz robotpoz;
-        List<poz> jartpoz = new List<poz>();  // dinamikus tárolóelem a bejárt területek tárolására
-        poz[] falakpoz = new poz[100];
         public MainPage()
         {
             this.InitializeComponent();
@@ -109,27 +114,11 @@ namespace hazi2
                 y += H;
             }
         }
-        /* public int utkozes()
-         {
-             int x = 0;
-             for (int i = 0; i < faldb; i++)
-             {
-                 if (Math.Abs(falakpoz[i].x - VAC.getAktpoz().x) < W && Math.Abs(falakpoz[i].y - VAC.getAktpoz().y) < H)
-                 {
-                     porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
-                     x = 1;
-                     break;
-                 }
-                 else
-                     x = 0;
-             }
-             return x;
-         }*/
         public int VACutkozes()
         {
             int oszlop = 0;
             int sor = 0;
-            int x = 0;
+            int x = 2;
             List<poz> sens = new List<poz>();
             switch (VAC.getIrany())
             {
@@ -231,7 +220,7 @@ namespace hazi2
                             {
                                 if (sens[i].x == VAC.getAktpoz().x)
                                 {
-                                    x = 1;
+                                    x = 0;
                                    // porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
                                 }
                             }
@@ -240,7 +229,7 @@ namespace hazi2
                             {
                                 if (sens[i].x == VAC.getAktpoz().x)
                                 {
-                                    x = 1;
+                                    x = 0;
                                     //porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
                                 }
                             }
@@ -249,7 +238,7 @@ namespace hazi2
                             {
                                 if (sens[i].y == VAC.getAktpoz().y)
                                 {
-                                    x = 1;
+                                    x = 0;
                                    // porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
                                 }
                             }
@@ -258,7 +247,7 @@ namespace hazi2
                             {
                                 if (sens[i].y == VAC.getAktpoz().y)
                                 {
-                                    x = 1;
+                                    x = 0;
                                     //porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
                                 }
                             }
@@ -267,14 +256,77 @@ namespace hazi2
                 }
                 else
                 {
-                    if (x != 1)
+                    if (x != 0)
                     {
-                        x = 0;
+                        x = 1;
                     }
                 }
             }
             return x;
         }
+
+        public int VACjart()
+        {
+            int x = 2;
+            switch (VAC.getIrany())
+            {
+                case irany.fel:
+                    {
+                        poz tmp = VAC.getAktpoz();
+                        tmp.y = tmp.y - H;
+                        if (jartpoz.Contains(tmp))
+                        {
+                            x = 0;
+                            break;
+                        }
+                        else
+                            x = 1;
+                    }
+                    break;
+                case irany.le:
+                    {
+                        poz tmp = VAC.getAktpoz();
+                        tmp.y = tmp.y + H;
+                        if (jartpoz.Contains(tmp))
+                        {
+                            x = 0;
+                            break;
+                        }
+                        else
+                            x = 1;
+                    }
+                    break;
+                case irany.jobbra:
+                    {
+                        poz tmp = VAC.getAktpoz();
+                        tmp.x = tmp.x + W;
+                        if (jartpoz.Contains(tmp))
+                        {
+                            x = 0;
+                            break;
+                        }
+                        else
+                            x = 1;
+                    }
+                    break;
+                case irany.balra:
+                    {
+                        poz tmp = VAC.getAktpoz();
+                        tmp.x = tmp.x - W;
+                        if (jartpoz.Contains(tmp))
+                        {
+                            x = 0;
+                            break;
+                        }
+                        else
+                            x = 1;
+                    }
+                    break;
+            }
+            return x;
+        }
+
+        // manuális mozgatáshoz a button-kattintás eventek
         public void buttonelore_Click(object sender, RoutedEventArgs e)
         {
             robotfel(VAC.getAktpoz());
@@ -292,7 +344,6 @@ namespace hazi2
             robotle(VAC.getAktpoz());
         }
 
-        int progressbarint = 0;
         private void progressbar()
         {
             if (!jartpoz.Contains(VAC.getAktpoz()))
@@ -439,39 +490,54 @@ namespace hazi2
             jart_kirajzol();
         }
 
-
-        public async void algoritmus1()
+        // algoritmusok
+        public async void alg_random_egyszererint()
         {
-            int milisec = 500;
+            int milisec = 300;
             while (true)
             {
+                int alert = 1;
                 Random r = new Random();
                 int genRand = r.Next(1, 10);
                 VAC.getData();
                 VACrajzol();
-                if (VACutkozes() == 1) //hiba:gyakoribb VACutkozes vizsgálat kellene
-                {                
+                if (VACutkozes() == 0)
+                {
+                    alert = 0;
+                }
+                if (VACjart() == 0)
+                {
+                    alert = 0;
+                }
+                if (alert == 0)
+                {
                     if (genRand <= 5)
                     {
                         VAC.jobbra();
                     }
-                    else if (genRand >= 5)
+                    else if (genRand > 5)
                     {
                         VAC.balra();
                     }
                     VAC.getData();
                 }
-                VAC.leptet();
-                VACrajzol();
+                else
+                {
+                    VAC.leptet();
+                    VACrajzol();
+                }
                 await Task.Delay(milisec);
-            }
+            }   
         }
-
         private void alg1_Click(object sender, RoutedEventArgs e)
         {
-            algoritmus1();
+            alg_random_egyszererint();
         }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 
 }

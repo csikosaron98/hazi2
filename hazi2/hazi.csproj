@@ -7,8 +7,8 @@
     <ProjectGuid>{6FD48FED-50BD-4CDB-AC3E-1B12DBAA6D6B}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>hazi2</RootNamespace>
-    <AssemblyName>hazi2</AssemblyName>
+    <RootNamespace>hazi</RootNamespace>
+    <AssemblyName>hazi</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
