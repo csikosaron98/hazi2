@@ -93,7 +93,7 @@ namespace hazi2
                         falrajzol(palya, x, y); //x=200tol 1450ig, y=50 tol 700 ig
                         falakpoz[k].x = x;
                         falakpoz[k].y = y;
-                        k++;                      
+                        k++;
                     }
                     else if (alakzatvizsgal(palya[i, j]) == 1)
                     {
@@ -103,7 +103,7 @@ namespace hazi2
                         robotpoz.y = y;
                         VAC.setAktpoz(robotpoz);
                     }
-                    else if (alakzatvizsgal(palya[i,j]) == 2)
+                    else if (alakzatvizsgal(palya[i, j]) == 2)
                     {
                         szobaterulet++;
                     }
@@ -221,7 +221,7 @@ namespace hazi2
                                 if (sens[i].x == VAC.getAktpoz().x)
                                 {
                                     x = 0;
-                                   // porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                                    // porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
                                 }
                             }
                             break;
@@ -239,7 +239,7 @@ namespace hazi2
                                 if (sens[i].y == VAC.getAktpoz().y)
                                 {
                                     x = 0;
-                                   // porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
+                                    // porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Green);
                                 }
                             }
                             break;
@@ -527,16 +527,104 @@ namespace hazi2
                     VACrajzol();
                 }
                 await Task.Delay(milisec);
-            }   
+            }
+        }
+        public async void circle()
+        {
+            int fordulcount = 1;
+            int milisec = 300;
+            double lepesszam = 1;
+            VAC.getData();
+            while (VACutkozes() != 0)
+            {
+                for (int i = 0; i < lepesszam; i++)
+                {
+                    VACrajzol();
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                    {
+                        porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Yellow);
+                        break;
+                    }
+                    VAC.leptet();
+                    VACrajzol();
+                    await Task.Delay(milisec);
+                    if (i % fordulcount == 0)
+                    {
+                        VAC.balra();
+                    }
+                }
+                fordulcount++;
+                lepesszam = lepesszam + 0.5;
+            }
+        }
+        public async void wallfollow()
+        {
+            VAC.jobbra();
+            VAC.jobbra();
+            int milisec = 300;
+            VAC.getData();
+            VACrajzol();
+            while (VACutkozes() != 0)
+            {
+                VAC.getData();
+                VAC.leptet();
+                VACrajzol();
+                await Task.Delay(milisec);
+                VAC.getData();
+            }
+            VAC.jobbra();
+            VAC.getData();
+            while (true)
+            {
+                if (alakzatvizsgal(VAC.getSensor()[0, 1]) == 0 && VACutkozes() != 0)
+                {
+                    VAC.getData();
+                    VAC.leptet();
+                    VACrajzol();
+                    VAC.getData();
+                    await Task.Delay(milisec);
+                }
+                else if (VACutkozes() == 0)
+                {
+                    VAC.getData();
+                    VAC.jobbra();
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                        continue;
+                    VAC.leptet();
+                    VACrajzol();
+                    VAC.getData();
+                    await Task.Delay(milisec);
+                }
+                else if (alakzatvizsgal(VAC.getSensor()[0, 1]) != 0 && VACutkozes() != 0)
+                {
+                    VAC.getData();
+                    VAC.balra();
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                        continue;
+                    VAC.leptet();
+                    VACrajzol();
+                    VAC.getData();
+                    await Task.Delay(milisec);
+                }
+            }
+
         }
         private void alg1_Click(object sender, RoutedEventArgs e)
         {
             alg_random_egyszererint();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void alg2_Click(object sender, RoutedEventArgs e)
         {
+            wallfollow();
+        }
 
+        private void alg3_Click(object sender, RoutedEventArgs e)
+        {
+            circle();
         }
     }
 

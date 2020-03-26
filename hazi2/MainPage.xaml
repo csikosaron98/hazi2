@@ -12,8 +12,8 @@
         <Button x:Name="button_beolvas" Content="Pálya beolvasás" Margin="156,194,0,0" VerticalAlignment="Top" Click="Button_Click"/>
         <Canvas x:Name="Canvas" Margin="115,0,-115,0">
             <Button x:Name="alg1" Content="Algoritmus 1" Canvas.Left="50" Canvas.Top="256" Click="alg1_Click"/>
-            <Button x:Name="alg2" Content="Algoritmus 2" Canvas.Left="50" Canvas.Top="320" Click="Button_Click_1"/>
-            <Button Content="Algoritmus 3" Canvas.Left="50" Canvas.Top="389"/>
+            <Button x:Name="alg2" Content="Algoritmus 2" Canvas.Left="50" Canvas.Top="320" Click="alg2_Click"/>
+            <Button x:Name="alg3" Content="Algoritmus 3" Canvas.Left="50" Canvas.Top="389" Click="alg3_Click"/>
             <Image Height="100" Width="100"/>
             <Image Height="155" Canvas.Left="23" Canvas.Top="25" Width="155" Source="Assets\kep.png" NineGrid="-3,0,0,0"/>
             <TextBlock Canvas.Left="65" Canvas.Top="482" TextWrapping="Wrap"><Run Text="Lefedettség"/><LineBreak/><Run/></TextBlock>
