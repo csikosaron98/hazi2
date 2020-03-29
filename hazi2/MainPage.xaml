@@ -11,17 +11,18 @@
     <Grid x:Name="Grid">
         <Button x:Name="button_beolvas" Content="Pálya beolvasás" Margin="156,194,0,0" VerticalAlignment="Top" Click="Button_Click"/>
         <Canvas x:Name="Canvas" Margin="115,0,-115,0">
-            <Button x:Name="alg1" Content="Algoritmus 1" Canvas.Left="50" Canvas.Top="256" Click="alg1_Click"/>
-            <Button x:Name="alg2" Content="Algoritmus 2" Canvas.Left="50" Canvas.Top="320" Click="alg2_Click"/>
-            <Button x:Name="alg3" Content="Algoritmus 3" Canvas.Left="50" Canvas.Top="389" Click="alg3_Click"/>
+            <Button x:Name="alg1" Content="Random" Canvas.Left="50" Canvas.Top="256" Click="alg1_Click" Width="100"/>
+            <Button x:Name="alg2" Content="Falkövetés" Canvas.Left="50" Canvas.Top="320" Click="alg2_Click" Width="100"/>
+            <Button x:Name="alg3" Content="Spirál" Canvas.Left="50" Canvas.Top="389" Click="alg3_Click" Width="100"/>
             <Image Height="100" Width="100"/>
             <Image Height="155" Canvas.Left="23" Canvas.Top="25" Width="155" Source="Assets\kep.png" NineGrid="-3,0,0,0"/>
-            <TextBlock Canvas.Left="65" Canvas.Top="482" TextWrapping="Wrap"><Run Text="Lefedettség"/><LineBreak/><Run/></TextBlock>
-            <ProgressBar x:Name="lefedettség" Height="36" Canvas.Left="37" Canvas.Top="441" Width="128" Value="50" ValueChanged="lefedettség_ValueChanged" Foreground="#FF21960F"/>
+            <TextBlock Canvas.Left="65" Canvas.Top="565" TextWrapping="Wrap"><Run Text="Lefedettség"/><LineBreak/><Run/></TextBlock>
+            <ProgressBar x:Name="lefedettség" Height="36" Canvas.Left="37" Canvas.Top="525" Width="128" Value="50" ValueChanged="lefedettség_ValueChanged" Foreground="#FF21960F"/>
             <Button x:Name="buttonelore" Content="Fel" Canvas.Left="1050" Canvas.Top="272" Width="70" Height="35" Click="buttonelore_Click"/>
             <Button x:Name="buttonbalra1" Content="Balra" Canvas.Left="968" Canvas.Top="320" Width="70" Height="35" Click="buttonbalra1_Click"/>
             <Button x:Name="buttonjobbra" Content="Jobbra" Canvas.Left="1130" Canvas.Top="320" Width="70" Height="35" Click="buttonjobbra_Click"/>
             <Button x:Name="buttonhatra" Content="Le" Canvas.Left="1050" Canvas.Top="367" Width="70" Height="35" Click="buttonhatra_Click"/>
+            <Button x:Name="alg4" Content="Kígyó" Canvas.Left="50" Canvas.Top="464" Width="100" Click="alg4_Click"/>
         </Canvas>
         <Image Height="100" Width="100"/>
 

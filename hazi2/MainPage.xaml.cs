@@ -560,8 +560,6 @@ namespace hazi2
         }
         public async void wallfollow()
         {
-            VAC.jobbra();
-            VAC.jobbra();
             int milisec = 300;
             VAC.getData();
             VACrajzol();
@@ -610,8 +608,103 @@ namespace hazi2
                     await Task.Delay(milisec);
                 }
             }
-
         }
+
+        public async void snake()
+        {
+            int milisec = 300;
+            int count = 0;
+            VAC.getData();
+            VACrajzol();
+            while (true)
+            {
+                while (VACutkozes() != 0)
+                {
+                    VAC.getData();
+                    VAC.leptet();
+                    VACrajzol();
+                    await Task.Delay(milisec);
+                    VAC.getData();
+                }
+                if (VACutkozes() == 0)
+                {
+                    count++;
+                }
+
+                switch (VAC.getIrany())
+                {
+                    case irany.fel:
+                            VAC.jobbra();
+                            VAC.getData();
+                            if (VACutkozes() == 0)
+                            {
+                                 VAC.balra();
+                                 VAC.balra();
+                                 VAC.getData();
+                                 continue;
+                            }
+                            VAC.leptet();
+                            VACrajzol();
+                            VAC.getData();
+                            await Task.Delay(milisec);
+                            VAC.jobbra();
+                            VAC.getData();
+                        break;
+                    case irany.le:
+                            VAC.balra();
+                            VAC.getData();
+                            if (VACutkozes() == 0)
+                            {
+                                VAC.jobbra();
+                                VAC.jobbra();
+                                VAC.getData();
+                                continue;
+                            }
+                            VAC.leptet();
+                            VACrajzol();
+                            VAC.getData();
+                            await Task.Delay(milisec);
+                            VAC.balra();
+                            VAC.getData();
+                        break;
+                    case irany.jobbra:
+                            VAC.jobbra();
+                            VAC.getData();
+                            if (VACutkozes() == 0)
+                            {
+                                VAC.balra();
+                                VAC.balra();
+                                VAC.getData();
+                                continue;
+                            }
+                            VAC.leptet();
+                            VACrajzol();
+                            VAC.getData();
+                            await Task.Delay(milisec);
+                            VAC.jobbra();
+                            VAC.getData();
+                        break;
+                    case irany.balra:
+                            VAC.balra();
+                            VAC.getData();
+                            if (VACutkozes() == 0)
+                            {
+                                VAC.jobbra();
+                                VAC.jobbra();
+                                VAC.getData();
+                                continue;
+                            }
+                            VAC.leptet();
+                            VACrajzol();
+                            VAC.getData();
+                            await Task.Delay(milisec);
+                            VAC.balra();
+                            VAC.getData();
+                        break;
+                }
+            }
+        }
+
         private void alg1_Click(object sender, RoutedEventArgs e)
         {
             alg_random_egyszererint();
@@ -625,6 +718,11 @@ namespace hazi2
         private void alg3_Click(object sender, RoutedEventArgs e)
         {
             circle();
+        }
+
+        private void alg4_Click(object sender, RoutedEventArgs e)
+        {
+            snake();
         }
     }
 
