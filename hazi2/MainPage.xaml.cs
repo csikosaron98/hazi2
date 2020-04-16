@@ -55,16 +55,17 @@ namespace hazi2
             jobbra,
             balra
         }
-        public struct poz
+        public class poz
         {
             public int x;
             public int y;
-            public poz(int x, int y) : this()
+            public poz(int x, int y) 
             {
                 this.x = x;
                 this.y = y;
             }
         }
+ 
 
         public MainPage()
         {
@@ -346,7 +347,7 @@ namespace hazi2
 
         private void progressbar()
         {
-            if (!jartpoz.Contains(VAC.getAktpoz()))
+            if (!VAC.getJartpoz().Contains(VAC.getAktpoz()))
             {
                 progressbarint++;
                 lefedettség.Value = progressbarint;
@@ -365,8 +366,8 @@ namespace hazi2
 
                 Canvas.Children.Add(jart_teglalapok[i]);
 
-                Canvas.SetLeft(jart_teglalapok[i], jartpoz[i].x);
-                Canvas.SetTop(jart_teglalapok[i], jartpoz[i].y);
+                Canvas.SetLeft(jart_teglalapok[i], VAC.getJartpoz()[i].x);
+                Canvas.SetTop(jart_teglalapok[i], VAC.getJartpoz()[i].y);
                 j++;
             }
         }
@@ -454,7 +455,7 @@ namespace hazi2
             porszivo.Stroke = new SolidColorBrush(Windows.UI.Colors.Black);
             porszivo.StrokeThickness = 1;
 
-            Canvas.Children.Add(porszivo);
+             Canvas.Children.Add(porszivo);
 
             Canvas.SetLeft(porszivo, x);
             Canvas.SetTop(porszivo, y);
@@ -485,7 +486,8 @@ namespace hazi2
             progressbar();
             Canvas.SetLeft(porszivo, (VAC.getAktpoz().x));
             Canvas.SetTop(porszivo, (VAC.getAktpoz().y));
-            jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
+           // jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
+            VAC.jart_add();
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
         }

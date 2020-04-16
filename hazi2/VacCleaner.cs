@@ -40,6 +40,7 @@ namespace hazi2
 
         //tagváltozók
 
+        List<poz> jartpoz = new List<poz>();
         string[,] palya;
         poz aktpoz;
         irany aktirany;
@@ -66,6 +67,10 @@ namespace hazi2
         public irany getIrany()
         {
             return this.aktirany;
+        }
+        public List<poz> getJartpoz()
+        {
+            return this.jartpoz;
         }
 
         //tagfüggvények
@@ -144,6 +149,11 @@ namespace hazi2
                     break;
             }
         }
+        public void jart_add ()
+        {
+                this.jartpoz.Add(new poz(this.aktpoz.x, this.aktpoz.y));
+        }
+
         public void getData()
         {
             int k = 0;
