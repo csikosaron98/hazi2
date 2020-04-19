@@ -40,12 +40,12 @@ namespace hazi2
 
         //tagváltozók
 
-        List<poz> jartpoz = new List<poz>();
         string[,] palya;
         poz aktpoz;
         irany aktirany;
         static string[,] mem = new string[SOR, OSZLOP];
         static string[,] sensor = new string[2, 5];
+        List<poz> Jartrect = new List<poz>();
 
         //setterek, getterek
         public void setAktpoz(poz p)
@@ -55,6 +55,10 @@ namespace hazi2
         public poz getAktpoz()
         {
             return this.aktpoz;
+        }
+        public List<poz> getJartrect()
+        {
+            return this.Jartrect;
         }
         public string[,] getSensor()
         {
@@ -68,12 +72,18 @@ namespace hazi2
         {
             return this.aktirany;
         }
-        public List<poz> getJartpoz()
-        {
-            return this.jartpoz;
-        }
+
 
         //tagfüggvények
+        public poz convert()
+        {
+            int x = (getAktpoz().x - 200) / 50;
+            int y = (getAktpoz().y - 50) / 50;
+            poz tmp;
+            tmp.x = x;
+            tmp.y = y;
+            return tmp;
+        }
 
         public void leptet()
         {
@@ -149,11 +159,6 @@ namespace hazi2
                     break;
             }
         }
-        public void jart_add ()
-        {
-                this.jartpoz.Add(new poz(this.aktpoz.x, this.aktpoz.y));
-        }
-
         public void getData()
         {
             int k = 0;

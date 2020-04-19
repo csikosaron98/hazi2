@@ -28,11 +28,8 @@ namespace hazi2
     {
         // változók
 
-        //List<poz> input = new List<poz>(); 
         poz[] falakpoz = new poz[100];
-        List<poz> jartpoz = new List<poz>();  // dinamikus tárolóelem a bejárt területek tárolására
         List<Rectangle> jart_teglalapok = new List<Rectangle>();
-
         Rectangle porszivo = new Rectangle();
         Rectangle jart = new Rectangle();
 
@@ -46,6 +43,8 @@ namespace hazi2
         int j = 0;
         int progressbarint = 0;
         int szobaterulet = 1;
+        bool algdone = false;
+
         static string[,] palya = new string[SOR, OSZLOP];
         const int faldb = 2 * SOR + 2 * OSZLOP + 2 * (SOR - 4) + 2 * (OSZLOP - 4);
         public enum irany
@@ -55,17 +54,16 @@ namespace hazi2
             jobbra,
             balra
         }
-        public class poz
+        public struct poz
         {
             public int x;
             public int y;
-            public poz(int x, int y) 
+            public poz(int x, int y) : this()
             {
                 this.x = x;
                 this.y = y;
             }
         }
- 
 
         public MainPage()
         {
@@ -275,7 +273,7 @@ namespace hazi2
                     {
                         poz tmp = VAC.getAktpoz();
                         tmp.y = tmp.y - H;
-                        if (jartpoz.Contains(tmp))
+                        if (VAC.getJartrect().Contains(tmp))
                         {
                             x = 0;
                             break;
@@ -288,7 +286,7 @@ namespace hazi2
                     {
                         poz tmp = VAC.getAktpoz();
                         tmp.y = tmp.y + H;
-                        if (jartpoz.Contains(tmp))
+                        if (VAC.getJartrect().Contains(tmp))
                         {
                             x = 0;
                             break;
@@ -301,7 +299,7 @@ namespace hazi2
                     {
                         poz tmp = VAC.getAktpoz();
                         tmp.x = tmp.x + W;
-                        if (jartpoz.Contains(tmp))
+                        if (VAC.getJartrect().Contains(tmp))
                         {
                             x = 0;
                             break;
@@ -314,7 +312,7 @@ namespace hazi2
                     {
                         poz tmp = VAC.getAktpoz();
                         tmp.x = tmp.x - W;
-                        if (jartpoz.Contains(tmp))
+                        if (VAC.getJartrect().Contains(tmp))
                         {
                             x = 0;
                             break;
@@ -347,7 +345,7 @@ namespace hazi2
 
         private void progressbar()
         {
-            if (!VAC.getJartpoz().Contains(VAC.getAktpoz()))
+            if (!VAC.getJartrect().Contains(VAC.getAktpoz()))
             {
                 progressbarint++;
                 lefedettség.Value = progressbarint;
@@ -366,8 +364,8 @@ namespace hazi2
 
                 Canvas.Children.Add(jart_teglalapok[i]);
 
-                Canvas.SetLeft(jart_teglalapok[i], VAC.getJartpoz()[i].x);
-                Canvas.SetTop(jart_teglalapok[i], VAC.getJartpoz()[i].y);
+                Canvas.SetLeft(jart_teglalapok[i], VAC.getJartrect()[i].x);
+                Canvas.SetTop(jart_teglalapok[i], VAC.getJartrect()[i].y);
                 j++;
             }
         }
@@ -379,7 +377,7 @@ namespace hazi2
             VAC.iranyvalt(irany.fel);
             Canvas.SetLeft(porszivo, p.x);
             Canvas.SetTop(porszivo, p.y - H);
-            jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
+            VAC.getJartrect().Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
             VAC.leptet();
@@ -393,7 +391,7 @@ namespace hazi2
             VAC.iranyvalt(irany.le);
             Canvas.SetLeft(porszivo, p.x);
             Canvas.SetTop(porszivo, p.y + H);
-            jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
+            VAC.getJartrect().Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
             VAC.leptet();
@@ -407,7 +405,7 @@ namespace hazi2
             VAC.iranyvalt(irany.jobbra);
             Canvas.SetLeft(porszivo, p.x + W);
             Canvas.SetTop(porszivo, p.y);
-            jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
+            VAC.getJartrect().Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
             VAC.leptet();
@@ -421,7 +419,7 @@ namespace hazi2
             VAC.iranyvalt(irany.balra);
             Canvas.SetLeft(porszivo, p.x - W);
             Canvas.SetTop(porszivo, p.y);
-            jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
+            VAC.getJartrect().Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
             VAC.leptet();
@@ -455,7 +453,7 @@ namespace hazi2
             porszivo.Stroke = new SolidColorBrush(Windows.UI.Colors.Black);
             porszivo.StrokeThickness = 1;
 
-             Canvas.Children.Add(porszivo);
+            Canvas.Children.Add(porszivo);
 
             Canvas.SetLeft(porszivo, x);
             Canvas.SetTop(porszivo, y);
@@ -486,8 +484,7 @@ namespace hazi2
             progressbar();
             Canvas.SetLeft(porszivo, (VAC.getAktpoz().x));
             Canvas.SetTop(porszivo, (VAC.getAktpoz().y));
-           // jartpoz.Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
-            VAC.jart_add();
+            VAC.getJartrect().Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
         }
@@ -615,10 +612,11 @@ namespace hazi2
         public async void snake()
         {
             int milisec = 300;
-            int count = 0;
+
+            int jobbrakigyo = 0;
             VAC.getData();
             VACrajzol();
-            while (true)
+            while (algdone == false)
             {
                 while (VACutkozes() != 0)
                 {
@@ -628,80 +626,153 @@ namespace hazi2
                     await Task.Delay(milisec);
                     VAC.getData();
                 }
-                if (VACutkozes() == 0)
-                {
-                    count++;
-                }
 
+                poz tmp;
                 switch (VAC.getIrany())
                 {
+
+
                     case irany.fel:
+
+                        tmp.x = VAC.getAktpoz().x - 50;
+                        tmp.y = VAC.getAktpoz().y;
+                        if (VAC.getJartrect().Contains(tmp))
+                        {
                             VAC.jobbra();
-                            VAC.getData();
-                            if (VACutkozes() == 0)
-                            {
-                                 VAC.balra();
-                                 VAC.balra();
-                                 VAC.getData();
-                                 continue;
-                            }
-                            VAC.leptet();
-                            VACrajzol();
-                            VAC.getData();
-                            await Task.Delay(milisec);
+                            jobbrakigyo = 1;
+                        }
+                        else
+                        {
+                            VAC.balra();
+                            jobbrakigyo = 0;
+                        }
+
+                        VAC.getData();
+                        if (VACutkozes() == 0)
+                        {
+                            algdone = true;
+                            break;
+                        }
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(milisec);
+                        if (jobbrakigyo == 1)
+                        {
                             VAC.jobbra();
-                            VAC.getData();
+                        }
+                        else
+                        {
+                            VAC.balra();
+                        }
+                        VAC.getData();
                         break;
                     case irany.le:
+
+                        tmp.x = VAC.getAktpoz().x + 50;
+                        tmp.y = VAC.getAktpoz().y;
+                        if (VAC.getJartrect().Contains(tmp))
+                        {
+                            VAC.jobbra();
+                            jobbrakigyo = 1;
+                        }
+                        else
+                        {
                             VAC.balra();
-                            VAC.getData();
-                            if (VACutkozes() == 0)
-                            {
-                                VAC.jobbra();
-                                VAC.jobbra();
-                                VAC.getData();
-                                continue;
-                            }
-                            VAC.leptet();
-                            VACrajzol();
-                            VAC.getData();
-                            await Task.Delay(milisec);
+                            jobbrakigyo = 0;
+                        }
+
+
+                        VAC.getData();
+                        if (VACutkozes() == 0)
+                        {
+                            algdone = true;
+                            break;
+                        }
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(milisec);
+                        if (jobbrakigyo == 1)
+                        {
+                            VAC.jobbra();
+                        }
+                        else
+                        {
                             VAC.balra();
-                            VAC.getData();
+                        }
+
+                        VAC.getData();
                         break;
                     case irany.jobbra:
+                        tmp.x = VAC.getAktpoz().x;
+                        tmp.y = VAC.getAktpoz().y - 50;
+                        if (VAC.getJartrect().Contains(tmp))
+                        {
                             VAC.jobbra();
-                            VAC.getData();
-                            if (VACutkozes() == 0)
-                            {
-                                VAC.balra();
-                                VAC.balra();
-                                VAC.getData();
-                                continue;
-                            }
-                            VAC.leptet();
-                            VACrajzol();
-                            VAC.getData();
-                            await Task.Delay(milisec);
+                            jobbrakigyo = 1;
+                        }
+                        else
+                        {
+                            VAC.balra();
+                            jobbrakigyo = 0;
+                        }
+
+                        VAC.getData();
+                        if (VACutkozes() == 0)
+                        {
+                            algdone = true;
+                            break;
+                        }
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(milisec);
+                        if (jobbrakigyo == 1)
+                        {
                             VAC.jobbra();
-                            VAC.getData();
+                        }
+                        else
+                        {
+                            VAC.balra();
+                        }
+
+                        VAC.getData();
                         break;
                     case irany.balra:
+                        tmp.x = VAC.getAktpoz().x;
+                        tmp.y = VAC.getAktpoz().y + 50;
+                        if (VAC.getJartrect().Contains(tmp))
+                        {
+                            VAC.jobbra();
+                            jobbrakigyo = 1;
+                        }
+                        else
+                        {
                             VAC.balra();
-                            VAC.getData();
-                            if (VACutkozes() == 0)
-                            {
-                                VAC.jobbra();
-                                VAC.jobbra();
-                                VAC.getData();
-                                continue;
-                            }
-                            VAC.leptet();
-                            VACrajzol();
-                            VAC.getData();
-                            await Task.Delay(milisec);
+                            jobbrakigyo = 0;
+                        }
+
+                        VAC.getData();
+                        if (VACutkozes() == 0)
+                        {
+                            algdone = true;
+                            break;
+                        }
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(milisec);
+                        if (jobbrakigyo == 1)
+                        {
+                            VAC.jobbra();
+                        }
+                        else
+                        {
                             VAC.balra();
-                            VAC.getData();
+
+                        }
+                        VAC.getData();
                         break;
                 }
             }
@@ -725,6 +796,14 @@ namespace hazi2
         private void alg4_Click(object sender, RoutedEventArgs e)
         {
             snake();
+        }
+
+        private async void alg5_Click(object sender, RoutedEventArgs e)
+        {
+            snake();
+            //if (algdone == true)
+            await Task.Delay(5);
+            wallfollow();
         }
     }
 
