@@ -23,7 +23,7 @@ namespace hazi2
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary> 
+    /// </summary>
     public sealed partial class MainPage : Page
     {
         // változók
@@ -44,6 +44,7 @@ namespace hazi2
         int progressbarint = 0;
         int szobaterulet = 1;
         bool algdone = false;
+
 
         static string[,] palya = new string[SOR, OSZLOP];
         const int faldb = 2 * SOR + 2 * OSZLOP + 2 * (SOR - 4) + 2 * (OSZLOP - 4);
@@ -562,7 +563,7 @@ namespace hazi2
             int milisec = 300;
             VAC.getData();
             VACrajzol();
-            while (VACutkozes() != 0)
+            while (VACutkozes() != 0) //ütközésig megy
             {
                 VAC.getData();
                 VAC.leptet();
@@ -572,6 +573,9 @@ namespace hazi2
             }
             VAC.jobbra();
             VAC.getData();
+            poz tmp;
+            int balravizsgal = 0; // változó -> jó irányba történő vizsgáláshoz
+
             while (true)
             {
                 if (alakzatvizsgal(VAC.getSensor()[0, 1]) == 0 && VACutkozes() != 0)
@@ -596,6 +600,7 @@ namespace hazi2
                 }
                 else if (alakzatvizsgal(VAC.getSensor()[0, 1]) != 0 && VACutkozes() != 0)
                 {
+                    balravizsgal = 1;
                     VAC.getData();
                     VAC.balra();
                     VAC.getData();
@@ -606,6 +611,63 @@ namespace hazi2
                     VAC.getData();
                     await Task.Delay(milisec);
                 }
+                if (balravizsgal == 1) // nem volt szinkronban a tmp vizsgálat és a robot léptetés
+                {
+                    VAC.balra(); //irányba állítás
+                    switch (VAC.getIrany()) //vizsgálat
+                    {
+                        case irany.fel:
+                            tmp.x = VAC.getAktpoz().x;
+                            tmp.y = VAC.getAktpoz().y - 50;
+                            break;
+                        case irany.le:
+                            tmp.x = VAC.getAktpoz().x;
+                            tmp.y = VAC.getAktpoz().y + 50;
+                            break;
+                        case irany.jobbra:
+                            tmp.x = VAC.getAktpoz().x + 50;
+                            tmp.y = VAC.getAktpoz().y;
+                            break;
+                        case irany.balra:
+                            tmp.x = VAC.getAktpoz().x - 50;
+                            tmp.y = VAC.getAktpoz().y;
+                            break;
+                        default:
+                            tmp.x = 10000;
+                            tmp.y = 10000;
+                            break;
+                    }
+                    VAC.jobbra(); //eredeti-vissza irányba állítás
+                    balravizsgal = 0;
+                }
+                else //ha szinkronban volt a két művelet
+                {
+                    switch (VAC.getIrany())
+                    {
+                        case irany.fel:
+                            tmp.x = VAC.getAktpoz().x;
+                            tmp.y = VAC.getAktpoz().y - 50;
+                            break;
+                        case irany.le:
+                            tmp.x = VAC.getAktpoz().x;
+                            tmp.y = VAC.getAktpoz().y + 50;
+                            break;
+                        case irany.jobbra:
+                            tmp.x = VAC.getAktpoz().x + 50;
+                            tmp.y = VAC.getAktpoz().y;
+                            break;
+                        case irany.balra:
+                            tmp.x = VAC.getAktpoz().x - 50;
+                            tmp.y = VAC.getAktpoz().y;
+                            break;
+                        default:
+                            tmp.x = 10000;
+                            tmp.y = 10000;
+                            break;
+                    }
+                }
+                if (VAC.getJartrect().Contains(tmp))
+                    break;
             }
         }
 
@@ -802,8 +864,10 @@ namespace hazi2
         {
             snake();
             //if (algdone == true)
-            await Task.Delay(5);
+            await Task.Delay(1000);
             wallfollow();
+            await Task.Delay(1000);
+            circle();
         }
     }
 
