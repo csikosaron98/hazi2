@@ -53,6 +53,27 @@ namespace hazi2
         {
             this.aktpoz = p;
         }
+        public poz GetFrontPoz()
+        {
+            poz tmp = this.getAktpoz();
+            switch (aktirany)
+            {
+                case irany.fel:
+                    tmp.y = tmp.y - 50;
+                    break;
+                case irany.le:
+                    tmp.y = tmp.y + 50;
+                    break;
+                case irany.jobbra:
+                    tmp.x = tmp.x + 50;
+                    break;
+                case irany.balra:
+                    tmp.x = tmp.x - 50;
+                    break;
+
+            }
+            return tmp;
+        }
         public poz getAktpoz()
         {
             return this.aktpoz;
