@@ -567,6 +567,7 @@ namespace hazi2
         }
         public async Task wallfollow()
         {
+            int chance = 3;
             int milisec = 300;
             VAC.getData();
             VACrajzol();
@@ -673,8 +674,14 @@ namespace hazi2
                             break;
                     }
                 }
-                if (VAC.getJartrect().Contains(tmp))
-                    break;
+                if (VAC.getJartrect().Contains(VAC.GetFrontPoz())) //ha oda lépek ahol már jártam, egy esély-
+                {
+                    chance--;
+                    if (chance == 0)
+                        return;
+                }
+                //if (VAC.getJartrect().Contains(tmp))
+                //  break;
             }
         }
 
@@ -859,7 +866,7 @@ namespace hazi2
         {
             int milisec = 300;
             int count = 0;
-            int chance = 10;
+            int chance = 18;
             VAC.getData();
             VACrajzol();
             while (true)
@@ -957,6 +964,59 @@ namespace hazi2
 
             }
         }
+        public async Task escape() //ütközés detektálás nélkül,falak nélkül még
+        {
+            int milisec = 300;
+            poz towhere;
+            VAC.getData();
+            poz aktpozIndex = VAC.getAktpoz();
+            towhere = VAC.smallestdistanceindex(); //ez a legközelebbi be nem járt pozíció
+            //adott pozícióra a porszívó eljuttatása:
+            while (aktpozIndex.x - 1 != towhere.x && aktpozIndex.y - 1 != towhere.y)
+            {
+                poz DirVector;
+                aktpozIndex = VAC.convertAktpozToIndex();
+                DirVector.x = towhere.x - aktpozIndex.x;
+                DirVector.y = towhere.y - aktpozIndex.y;
+                VAC.getData();
+                if (DirVector.x > 0)
+                {
+                    VAC.iranyvalt(irany.jobbra); //jobbra megyek
+                    VAC.leptet();
+                    VACrajzol();
+                    await Task.Delay(milisec);
+                    VAC.getData();
+                }
+                else
+                {
+                    VAC.iranyvalt(irany.balra); //balra megyek
+                    VAC.leptet();
+                    VACrajzol();
+                    await Task.Delay(milisec);
+                    VAC.getData();
+                }
+
+                if (DirVector.y > 0)
+                {
+                    VAC.iranyvalt(irany.le); //le megyek
+                    VAC.leptet();
+                    VACrajzol();
+                    await Task.Delay(milisec);
+                    VAC.getData();
+                }
+                else
+                {
+                    VAC.iranyvalt(irany.fel); //fel megyek
+                    VAC.leptet();
+                    VACrajzol();
+                    await Task.Delay(milisec);
+                    VAC.getData();
+                }
+
+            }
+            return;
+
+        }
 
         private void alg1_Click(object sender, RoutedEventArgs e)
         {
@@ -983,11 +1043,11 @@ namespace hazi2
         private async void alg6button_Click(object sender, RoutedEventArgs e)
         {
             await wallfollow();
-            await circle();
+            //await circle();
+            await snake2();
+            await escape();
             await snake2();
         }
     }
 
 }
-
-

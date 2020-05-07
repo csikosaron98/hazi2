@@ -23,6 +23,7 @@
             <Button x:Name="buttonjobbra" Content="Jobbra" Canvas.Left="1130" Canvas.Top="320" Width="70" Height="35" Click="buttonjobbra_Click"/>
             <Button x:Name="buttonhatra" Content="Le" Canvas.Left="1050" Canvas.Top="367" Width="70" Height="35" Click="buttonhatra_Click"/>
             <Button x:Name="alg4" Content="Kígyó" Canvas.Left="50" Canvas.Top="464" Width="100" Click="alg4_Click"/>
+            <Button x:Name="alg6" Content="Teszt" Canvas.Left="51" Canvas.Top="665" Width="100" Click="alg6button_Click"/>
         </Canvas>
         <Image Height="100" Width="100"/>
 

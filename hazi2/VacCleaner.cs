@@ -97,13 +97,20 @@ namespace hazi2
 
 
         //tagfüggvények
-        public poz convert()
+        public poz convertAktpozToIndex()
         {
             int x = (getAktpoz().x - 200) / 50;
             int y = (getAktpoz().y - 50) / 50;
             poz tmp;
             tmp.x = x;
             tmp.y = y;
+            return tmp;
+        }
+        public poz convertIndexToPoz(int x, int y)
+        {
+            poz tmp;
+            tmp.x = x * 50 + 200;
+            tmp.y = y * 50 + 50;
             return tmp;
         }
 
@@ -307,6 +314,45 @@ namespace hazi2
                     }
                     break;
             }
+        }
+        public poz smallestdistanceindex() //mátrixon belüli index-szel tér vissza
+        {
+            double smallest = 1000;
+            poz tmp;
+            poz index;
+            index.x = 0;
+            index.y = 0;
+            double valuetmp = 0;
+            for (int i = 0; i < SOR; i++)
+            {
+                for (int j = 0; j < OSZLOP; j++)
+                {
+                    if (mem[i, j] == ".") //ahol nincs fal
+                    {
+                        poz tmp2;
+                        tmp2.x = j;
+                        tmp2.y = i;
+                        tmp2 = convertIndexToPoz(j, i);
+                        if (!Jartrect.Contains(tmp2))
+                        {
+                            tmp = convertAktpozToIndex(); //aktpoz konvertálás
+                            valuetmp = distance(j, i, tmp.x, tmp.y);
+                            if (valuetmp < smallest)
+                            {
+                                smallest = valuetmp;
+                                index.x = j;
+                                index.y = i;
+                            }
+                        }
+
+                    }
+                }
+            }
+            return index;
+        }
+        double distance(int x1, int y1, int x2, int y2)
+        {
+            return Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         }
     }
 }
