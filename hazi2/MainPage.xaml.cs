@@ -866,7 +866,7 @@ namespace hazi2
         {
             int milisec = 300;
             int count = 0;
-            int chance = 18;
+            int chance = 8;
             VAC.getData();
             VACrajzol();
             while (true)
@@ -972,7 +972,7 @@ namespace hazi2
             poz aktpozIndex = VAC.getAktpoz();
             towhere = VAC.smallestdistanceindex(); //ez a legközelebbi be nem járt pozíció
             //adott pozícióra a porszívó eljuttatása:
-            while (aktpozIndex.x - 1 != towhere.x && aktpozIndex.y - 1 != towhere.y)
+            while (aktpozIndex.x != towhere.x || aktpozIndex.y != towhere.y)
             {
                 poz DirVector;
                 aktpozIndex = VAC.convertAktpozToIndex();
@@ -987,7 +987,7 @@ namespace hazi2
                     await Task.Delay(milisec);
                     VAC.getData();
                 }
-                else
+                else if (DirVector.x < 0)
                 {
                     VAC.iranyvalt(irany.balra); //balra megyek
                     VAC.leptet();
@@ -1004,7 +1004,7 @@ namespace hazi2
                     await Task.Delay(milisec);
                     VAC.getData();
                 }
-                else
+                else if (DirVector.y < 0)
                 {
                     VAC.iranyvalt(irany.fel); //fel megyek
                     VAC.leptet();
@@ -1042,11 +1042,17 @@ namespace hazi2
 
         private async void alg6button_Click(object sender, RoutedEventArgs e)
         {
+            int milisec = 1000;
             await wallfollow();
             //await circle();
             await snake2();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
             await escape();
             await snake2();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await escape();
         }
     }
 
