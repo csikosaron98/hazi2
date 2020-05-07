@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -28,7 +29,7 @@ namespace hazi2
     {
         // változók
 
-        poz[] falakpoz = new poz[100];
+        List<poz> falakpoz = new List<poz>();
         List<Rectangle> jart_teglalapok = new List<Rectangle>();
         Rectangle porszivo = new Rectangle();
         Rectangle jart = new Rectangle();
@@ -36,10 +37,10 @@ namespace hazi2
         static poz robotpoz;
         VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.fel);
 
-        const int SOR = 12;
-        const int OSZLOP = 12;
-        const int H = 50;
-        const int W = 50;
+        const int SOR = 15;
+        const int OSZLOP = 15;
+        const int H = 45;
+        const int W = 45;
         int j = 0;
         int progressbarint = 0;
         int szobaterulet = 1;
@@ -47,7 +48,7 @@ namespace hazi2
 
 
         static string[,] palya = new string[SOR, OSZLOP];
-        const int faldb = 2 * SOR + 2 * OSZLOP + 2 * (SOR - 4) + 2 * (OSZLOP - 4);
+
         public enum irany
         {
             fel,
@@ -72,9 +73,8 @@ namespace hazi2
         }
         private void Button_Click(object sender, RoutedEventArgs e) //pálya inic gomb event handler -> tömbbe
         {
-            int x = 200;
-            int y = 50;
-            int k = 0;
+            int x = 4*H;
+            int y = 45;
             StreamReader reader = new StreamReader("robot.txt");
             for (int i = 0; i < SOR; i++)
             {
@@ -91,9 +91,10 @@ namespace hazi2
                     if (alakzatvizsgal(palya[i, j]) == 0)
                     {
                         falrajzol(palya, x, y); //x=200tol 1450ig, y=50 tol 700 ig
-                        falakpoz[k].x = x;
-                        falakpoz[k].y = y;
-                        k++;
+                        poz fal;
+                        fal.x = x;
+                        fal.y = y;
+                        falakpoz.Add(fal);
                     }
                     else if (alakzatvizsgal(palya[i, j]) == 1)
                     {
@@ -109,8 +110,8 @@ namespace hazi2
                     }
                     x += W;
                 }
-                if (x == 800)
-                    x = 200;
+                if (x == (SOR+4)*H)
+                    x = 4*H;
                 y += H;
             }
         }
@@ -126,15 +127,15 @@ namespace hazi2
                     {
                         int k = 0;
                         int l = 0;
-                        oszlop = (VAC.getAktpoz().x - 200) / 50 - 2;
-                        sor = (VAC.getAktpoz().y - 50) / 50 - 1;
+                        oszlop = (VAC.getAktpoz().x - 4*H) / H - 2;
+                        sor = (VAC.getAktpoz().y - H) / H - 1;
                         for (int i = sor; i > sor - 2; i--)
                         {
                             for (int j = oszlop; j < oszlop + 5; j++)
                             {
                                 if (alakzatvizsgal(VAC.getSensor()[k, l]) == 0)
                                 {
-                                    sens.Add(new poz((j * W) + 200, (i * H) + 50));
+                                    sens.Add(new poz((j * W) + 4*H, (i * H) + H));
                                 }
                                 l++;
                             }
@@ -147,8 +148,8 @@ namespace hazi2
                     {
                         int k = 0;
                         int l = 0;
-                        oszlop = (VAC.getAktpoz().x - 200) / 50 + 2;
-                        sor = (VAC.getAktpoz().y - 50) / 50 + 1;
+                        oszlop = (VAC.getAktpoz().x - 4*H) / H + 2;
+                        sor = (VAC.getAktpoz().y - H) / H + 1;
                         for (int i = sor; i < sor + 2; i++)
                         {
                             for (int j = oszlop; j > oszlop - 5; j--)
@@ -156,7 +157,7 @@ namespace hazi2
 
                                 if (alakzatvizsgal(VAC.getSensor()[k, l]) == 0)
                                 {
-                                    sens.Add(new poz((j * W) + 200, (i * H) + 50));
+                                    sens.Add(new poz((j * W) + 4*H, (i * H) + H));
                                 }
                                 l++;
                             }
@@ -169,8 +170,8 @@ namespace hazi2
                     {
                         int k = 0;
                         int l = 0;
-                        oszlop = (VAC.getAktpoz().x - 200) / 50 + 1;
-                        sor = (VAC.getAktpoz().y - 50) / 50 - 2;
+                        oszlop = (VAC.getAktpoz().x - 4*H) / H + 1;
+                        sor = (VAC.getAktpoz().y - H) / H - 2;
                         for (int j = oszlop; j < oszlop + 2; j++)
                         {
                             for (int i = sor; i < sor + 5; i++)
@@ -178,7 +179,7 @@ namespace hazi2
 
                                 if (alakzatvizsgal(VAC.getSensor()[k, l]) == 0)
                                 {
-                                    sens.Add(new poz((j * W) + 200, (i * H) + 50));
+                                    sens.Add(new poz((j * W) + 4*H, (i * H) + H));
                                 }
                                 l++;
                             }
@@ -191,8 +192,8 @@ namespace hazi2
                     {
                         int k = 0;
                         int l = 0;
-                        oszlop = (VAC.getAktpoz().x - 200) / 50 - 1;
-                        sor = (VAC.getAktpoz().y - 50) / 50 + 2;
+                        oszlop = (VAC.getAktpoz().x - 4*H) / H - 1;
+                        sor = (VAC.getAktpoz().y - H) / H + 2;
                         for (int j = oszlop; j > oszlop - 2; j--)
                         {
                             for (int i = sor; i > sor - 5; i--)
@@ -200,7 +201,7 @@ namespace hazi2
 
                                 if (alakzatvizsgal(VAC.getSensor()[k, l]) == 0)
                                 {
-                                    sens.Add(new poz((j * W) + 200, (i * H) + 50));
+                                    sens.Add(new poz((j * W) + 4*H, (i * H) + H));
                                 }
                                 l++;
                             }
@@ -626,18 +627,18 @@ namespace hazi2
                     {
                         case irany.fel:
                             tmp.x = VAC.getAktpoz().x;
-                            tmp.y = VAC.getAktpoz().y - 50;
+                            tmp.y = VAC.getAktpoz().y - H;
                             break;
                         case irany.le:
                             tmp.x = VAC.getAktpoz().x;
-                            tmp.y = VAC.getAktpoz().y + 50;
+                            tmp.y = VAC.getAktpoz().y + H;
                             break;
                         case irany.jobbra:
-                            tmp.x = VAC.getAktpoz().x + 50;
+                            tmp.x = VAC.getAktpoz().x + H;
                             tmp.y = VAC.getAktpoz().y;
                             break;
                         case irany.balra:
-                            tmp.x = VAC.getAktpoz().x - 50;
+                            tmp.x = VAC.getAktpoz().x - H;
                             tmp.y = VAC.getAktpoz().y;
                             break;
                         default:
@@ -654,18 +655,18 @@ namespace hazi2
                     {
                         case irany.fel:
                             tmp.x = VAC.getAktpoz().x;
-                            tmp.y = VAC.getAktpoz().y - 50;
+                            tmp.y = VAC.getAktpoz().y - H;
                             break;
                         case irany.le:
                             tmp.x = VAC.getAktpoz().x;
-                            tmp.y = VAC.getAktpoz().y + 50;
+                            tmp.y = VAC.getAktpoz().y + H;
                             break;
                         case irany.jobbra:
-                            tmp.x = VAC.getAktpoz().x + 50;
+                            tmp.x = VAC.getAktpoz().x + H;
                             tmp.y = VAC.getAktpoz().y;
                             break;
                         case irany.balra:
-                            tmp.x = VAC.getAktpoz().x - 50;
+                            tmp.x = VAC.getAktpoz().x - H;
                             tmp.y = VAC.getAktpoz().y;
                             break;
                         default:
@@ -684,7 +685,6 @@ namespace hazi2
                 //  break;
             }
         }
-
         public async Task snake()
         {
             int milisec = 300;
@@ -707,11 +707,8 @@ namespace hazi2
                 poz tmp; //balra vizsgálom, hogy voltam-e már ott
                 switch (VAC.getIrany())
                 {
-
-
                     case irany.fel:
-
-                        tmp.x = VAC.getAktpoz().x - 50; //balra mező
+                        tmp.x = VAC.getAktpoz().x - H; //balra mező
                         tmp.y = VAC.getAktpoz().y;
                         if (VAC.getJartrect().Contains(tmp))
                         {
@@ -723,9 +720,6 @@ namespace hazi2
                             VAC.balra();
                             jobbrakigyo = 0;
                         }
-
-
-
                         VAC.getData();
                         if (VACutkozes() == 0)
                         {
@@ -747,8 +741,7 @@ namespace hazi2
                         VAC.getData();
                         break;
                     case irany.le:
-
-                        tmp.x = VAC.getAktpoz().x + 50;
+                        tmp.x = VAC.getAktpoz().x + H;
                         tmp.y = VAC.getAktpoz().y;
                         if (VAC.getJartrect().Contains(tmp))
                         {
@@ -760,8 +753,6 @@ namespace hazi2
                             VAC.balra();
                             jobbrakigyo = 0;
                         }
-
-
                         VAC.getData();
                         if (VACutkozes() == 0)
                         {
@@ -780,12 +771,11 @@ namespace hazi2
                         {
                             VAC.balra();
                         }
-
                         VAC.getData();
                         break;
                     case irany.jobbra:
                         tmp.x = VAC.getAktpoz().x;
-                        tmp.y = VAC.getAktpoz().y - 50;
+                        tmp.y = VAC.getAktpoz().y - H;
                         if (VAC.getJartrect().Contains(tmp))
                         {
                             VAC.jobbra();
@@ -796,7 +786,6 @@ namespace hazi2
                             VAC.balra();
                             jobbrakigyo = 0;
                         }
-
                         VAC.getData();
                         if (VACutkozes() == 0)
                         {
@@ -815,12 +804,11 @@ namespace hazi2
                         {
                             VAC.balra();
                         }
-
                         VAC.getData();
                         break;
                     case irany.balra:
                         tmp.x = VAC.getAktpoz().x;
-                        tmp.y = VAC.getAktpoz().y + 50;
+                        tmp.y = VAC.getAktpoz().y + H;
                         if (VAC.getJartrect().Contains(tmp))
                         {
                             VAC.jobbra();
@@ -968,12 +956,57 @@ namespace hazi2
         {
             int milisec = 300;
             poz towhere;
+            poz nearest;
             VAC.getData();
             poz aktpozIndex = VAC.getAktpoz();
+            nearest = VAC.nearestindex();
             towhere = VAC.smallestdistanceindex(); //ez a legközelebbi be nem járt pozíció
             //adott pozícióra a porszívó eljuttatása:
             while (aktpozIndex.x != towhere.x || aktpozIndex.y != towhere.y)
             {
+                while (VACutkozes() != 0)
+                {
+                    VAC.getData();
+                    poz DirVector2;
+                    aktpozIndex = VAC.convertAktpozToIndex();
+                    nearest = VAC.nearestindex();
+                    DirVector2.x = nearest.x - aktpozIndex.x;
+                    DirVector2.y = nearest.y - aktpozIndex.y;
+                    VAC.getData();
+                    if (DirVector2.x > 0)
+                    {
+                        VAC.iranyvalt(irany.jobbra); //jobbra megyek
+                        VAC.leptet();
+                        VACrajzol();
+                        await Task.Delay(milisec);
+                        VAC.getData();
+                    }
+                    else if (DirVector2.x < 0)
+                    {
+                        VAC.iranyvalt(irany.balra); //balra megyek
+                        VAC.leptet();
+                        VACrajzol();
+                        await Task.Delay(milisec);
+                        VAC.getData();
+                    }
+                    if (DirVector2.y > 0)
+                    {
+                        VAC.iranyvalt(irany.le); //le megyek
+                        VAC.leptet();
+                        VACrajzol();
+                        await Task.Delay(milisec);
+                        VAC.getData();
+                    }
+                    else if (DirVector2.y < 0)
+                    {
+                        VAC.iranyvalt(irany.fel); //fel megyek
+                        VAC.leptet();
+                        VACrajzol();
+                        await Task.Delay(milisec);
+                        VAC.getData();
+                    }
+                }
+                VAC.getData();
                 poz DirVector;
                 aktpozIndex = VAC.convertAktpozToIndex();
                 DirVector.x = towhere.x - aktpozIndex.x;
@@ -995,7 +1028,6 @@ namespace hazi2
                     await Task.Delay(milisec);
                     VAC.getData();
                 }
-
                 if (DirVector.y > 0)
                 {
                     VAC.iranyvalt(irany.le); //le megyek
@@ -1012,10 +1044,8 @@ namespace hazi2
                     await Task.Delay(milisec);
                     VAC.getData();
                 }
-
             }
             return;
-
         }
 
         private void alg1_Click(object sender, RoutedEventArgs e)
@@ -1037,10 +1067,7 @@ namespace hazi2
         {
             await snake();
         }
-
-
-
-        private async void alg6button_Click(object sender, RoutedEventArgs e)
+        private async void alg5_Click(object sender, RoutedEventArgs e )
         {
             int milisec = 1000;
             await wallfollow();
@@ -1049,6 +1076,14 @@ namespace hazi2
             await Task.Delay(milisec);
             await Task.Delay(milisec);
             await escape();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await snake2();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await escape();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
             await snake2();
             await Task.Delay(milisec);
             await Task.Delay(milisec);

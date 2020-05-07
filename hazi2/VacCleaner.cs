@@ -34,10 +34,10 @@ namespace hazi2
 
         //konstansok
 
-        const int SOR = 12;
-        const int OSZLOP = 12;
-        const int H = 50;
-        const int W = 50;
+        const int SOR = 15;
+        const int OSZLOP = 15;
+        const int H = 45;
+        const int W = 45;
 
         //tagváltozók
 
@@ -49,6 +49,7 @@ namespace hazi2
         List<poz> Jartrect = new List<poz>();
 
         //setterek, getterek
+
         public void setAktpoz(poz p)
         {
             this.aktpoz = p;
@@ -59,16 +60,16 @@ namespace hazi2
             switch (aktirany)
             {
                 case irany.fel:
-                    tmp.y = tmp.y - 50;
+                    tmp.y = tmp.y - H;
                     break;
                 case irany.le:
-                    tmp.y = tmp.y + 50;
+                    tmp.y = tmp.y + H;
                     break;
                 case irany.jobbra:
-                    tmp.x = tmp.x + 50;
+                    tmp.x = tmp.x + H;
                     break;
                 case irany.balra:
-                    tmp.x = tmp.x - 50;
+                    tmp.x = tmp.x - H;
                     break;
 
             }
@@ -99,8 +100,8 @@ namespace hazi2
         //tagfüggvények
         public poz convertAktpozToIndex()
         {
-            int x = (getAktpoz().x - 200) / 50;
-            int y = (getAktpoz().y - 50) / 50;
+            int x = (getAktpoz().x - 4*H) / H;
+            int y = (getAktpoz().y - H) / H;
             poz tmp;
             tmp.x = x;
             tmp.y = y;
@@ -109,8 +110,8 @@ namespace hazi2
         public poz convertIndexToPoz(int x, int y)
         {
             poz tmp;
-            tmp.x = x * 50 + 200;
-            tmp.y = y * 50 + 50;
+            tmp.x = x * H + 4*H;
+            tmp.y = y * H + H;
             return tmp;
         }
 
@@ -196,8 +197,8 @@ namespace hazi2
             {
                 case irany.fel:
                     {
-                        int oszlop = (this.aktpoz.x - 200) / 50 - 2;
-                        int sor = (this.aktpoz.y - 50) / 50 - 1;
+                        int oszlop = (this.aktpoz.x - 4*H) / H - 2;
+                        int sor = (this.aktpoz.y - H) / H - 1;
                         for (int i = sor; i > sor - 2; i--)
                         {
                             for (int j = oszlop; j < oszlop + 5; j++)
@@ -225,8 +226,8 @@ namespace hazi2
                     break;
                 case irany.le:
                     {
-                        int oszlop = (this.aktpoz.x - 200) / 50 + 2;
-                        int sor = (this.aktpoz.y - 50) / 50 + 1;
+                        int oszlop = (this.aktpoz.x - 4*H) / H + 2;
+                        int sor = (this.aktpoz.y - H) / H + 1;
                         for (int i = sor; i < sor + 2; i++)
                         {
                             for (int j = oszlop; j > oszlop - 5; j--)
@@ -255,8 +256,8 @@ namespace hazi2
                     break;
                 case irany.jobbra:
                     {
-                        int oszlop = (this.aktpoz.x - 200) / 50 + 1;
-                        int sor = (this.aktpoz.y - 50) / 50 - 2;
+                        int oszlop = (this.aktpoz.x - 4*H) / H + 1;
+                        int sor = (this.aktpoz.y - H) / H - 2;
                         for (int j = oszlop; j < oszlop + 2; j++)
                         {
                             for (int i = sor; i < sor + 5; i++)
@@ -285,8 +286,8 @@ namespace hazi2
                     break;
                 case irany.balra:
                     {
-                        int oszlop = (this.aktpoz.x - 200) / 50 - 1;
-                        int sor = (this.aktpoz.y - 50) / 50 + 2;
+                        int oszlop = (this.aktpoz.x - 4*H) / H - 1;
+                        int sor = (this.aktpoz.y - H) / H + 2;
                         for (int j = oszlop; j > oszlop - 2; j--)
                         {
                             for (int i = sor; i > sor - 5; i--)
@@ -354,5 +355,56 @@ namespace hazi2
         {
             return Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         }
+
+        public poz nearestindex() //mátrixon belüli index-szel tér vissza
+        {
+            double smallest = 1000;
+            double secondsmallest = 1000;
+            poz tmp;
+            poz index;
+            index.x = 0;
+            index.y = 0;
+            double valuetmp = 0;
+            for (int i = 0; i < SOR; i++)
+            {
+                for (int j = 0; j < OSZLOP; j++)
+                {
+                    if (mem[i, j] == ".") //ahol nincs fal
+                    {
+                        tmp = convertAktpozToIndex(); //aktpoz konvertálás
+                        valuetmp = distance(j, i, tmp.x, tmp.y);
+                        if (valuetmp < smallest)
+                        {
+                           secondsmallest = smallest;
+                           smallest = valuetmp;
+                        }
+                        else if (valuetmp < secondsmallest && valuetmp != smallest)
+                        {
+                            secondsmallest = valuetmp;
+                        }
+
+                    }
+                }
+            }
+            for (int i = 0; i < SOR; i++)
+            {
+                for (int j = 0; j < OSZLOP; j++)
+                {
+                    if (mem[i, j] == ".") //ahol nincs fal
+                    {
+                        tmp = convertAktpozToIndex(); //aktpoz konvertálás
+                        valuetmp = distance(j, i, tmp.x, tmp.y);
+                        if (valuetmp == secondsmallest)
+                        {
+                            index.x = j;
+                            index.y = i;
+                        }
+
+                    }
+                }
+            }
+            return index;
+        }
+        
     }
 }
