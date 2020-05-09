@@ -9,7 +9,7 @@ using static hazi2.MainPage;
 namespace hazi2
 {
 
-    // két Interface: bemenet(szenzor), kimenet(motor)
+    //két Interface: bemenet(szenzor), kimenet(motor)
     public interface Irobotinput
     {
         void getData();

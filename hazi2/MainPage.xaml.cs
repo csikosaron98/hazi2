@@ -68,6 +68,8 @@ namespace hazi2
             }
         }
 
+        string room = "";
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -76,7 +78,7 @@ namespace hazi2
         {
             int x = 4*H;
             int y = 45;
-            StreamReader reader = new StreamReader("robot.txt");
+            StreamReader reader = new StreamReader(room);
             for (int i = 0; i < SOR; i++)
             {
                 string sor = reader.ReadLine();
@@ -493,7 +495,7 @@ namespace hazi2
         }
 
         // algoritmusok
-        const int milisec = 100;
+        const int milisec = 200;
         public async Task alg_random_egyszererint()
         {
             int milisec = 300;
@@ -567,7 +569,7 @@ namespace hazi2
                 lepesszam = lepesszam + 0.5;
             }
         }
-        public async Task wallfollow()
+        public async Task wallfollow_left()
         {
             int chance = 10;
             VAC.getData();
@@ -648,6 +650,124 @@ namespace hazi2
                     }
                     VAC.jobbra(); //eredeti-vissza irányba állítás
                     balravizsgal = 0;
+                }
+                else //ha szinkronban volt a két művelet
+                {
+                    switch (VAC.getIrany())
+                    {
+                        case irany.fel:
+                            tmp.x = VAC.getAktpoz().x;
+                            tmp.y = VAC.getAktpoz().y - H;
+                            break;
+                        case irany.le:
+                            tmp.x = VAC.getAktpoz().x;
+                            tmp.y = VAC.getAktpoz().y + H;
+                            break;
+                        case irany.jobbra:
+                            tmp.x = VAC.getAktpoz().x + H;
+                            tmp.y = VAC.getAktpoz().y;
+                            break;
+                        case irany.balra:
+                            tmp.x = VAC.getAktpoz().x - H;
+                            tmp.y = VAC.getAktpoz().y;
+                            break;
+                        default:
+                            tmp.x = 10000;
+                            tmp.y = 10000;
+                            break;
+                    }
+                }
+                if (VAC.getJartrect().Contains(VAC.GetFrontPoz())) //ha oda lépek ahol már jártam, egy esély-
+                {
+                    chance--;
+                    if (chance == 0)
+                        return;
+                }
+                //if (VAC.getJartrect().Contains(tmp))
+                //  break;
+            }
+        }
+        public async Task wallfollow_right()
+        {
+            int chance = 10;
+            VAC.getData();
+            VACrajzol();
+            while (VACutkozes() != 0) //ütközésig megy
+            {
+                VAC.getData();
+                VAC.leptet();
+                VACrajzol();
+                await Task.Delay(milisec);
+                VAC.getData();
+            }
+            VAC.balra();
+            VAC.getData();
+            poz tmp;
+            int jobbravizsgal = 0; // változó -> jó irányba történő vizsgáláshoz
+
+            while (true)
+            {
+                if (alakzatvizsgal(VAC.getSensor()[0, 3]) == 0 && VACutkozes() != 0)
+                {
+                    VAC.getData();
+                    VAC.leptet();
+                    VACrajzol();
+                    VAC.getData();
+                    await Task.Delay(milisec);
+                }
+                else if (VACutkozes() == 0)
+                {
+                    VAC.getData();
+                    VAC.balra();
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                        continue;
+                    VAC.leptet();
+                    VACrajzol();
+                    VAC.getData();
+                    await Task.Delay(milisec);
+                }
+                else if (alakzatvizsgal(VAC.getSensor()[0, 3]) != 0 && VACutkozes() != 0)
+                {
+                    jobbravizsgal = 1;
+                    VAC.getData();
+                    VAC.jobbra();
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                        continue;
+                    VAC.leptet();
+                    VACrajzol();
+                    VAC.getData();
+                    await Task.Delay(milisec);
+                }
+                if (jobbravizsgal == 1) // nem volt szinkronban a tmp vizsgálat és a robot léptetés
+                {
+                    VAC.jobbra(); //irányba állítás
+                    switch (VAC.getIrany()) //vizsgálat
+                    {
+                        case irany.fel:
+                            tmp.x = VAC.getAktpoz().x;
+                            tmp.y = VAC.getAktpoz().y - H;
+                            break;
+                        case irany.le:
+                            tmp.x = VAC.getAktpoz().x;
+                            tmp.y = VAC.getAktpoz().y + H;
+                            break;
+                        case irany.jobbra:
+                            tmp.x = VAC.getAktpoz().x + H;
+                            tmp.y = VAC.getAktpoz().y;
+                            break;
+                        case irany.balra:
+                            tmp.x = VAC.getAktpoz().x - H;
+                            tmp.y = VAC.getAktpoz().y;
+                            break;
+                        default:
+                            tmp.x = 10000;
+                            tmp.y = 10000;
+                            break;
+                    }
+                    VAC.balra(); //eredeti-vissza irányba állítás
+                    jobbravizsgal = 0;
                 }
                 else //ha szinkronban volt a két művelet
                 {
@@ -863,8 +983,11 @@ namespace hazi2
                     VACrajzol();
                     await Task.Delay(milisec);
                     VAC.getData();
+                    if (lefedettség.Value == lefedettség.Maximum)
+                        return;
                     if (VAC.getJartrect().Contains(VAC.GetFrontPoz())) //ha oda lépek ahol már jártam, egy esély-
                     {
+
                         chance--;
                         if (chance == 0)
                             return;
@@ -946,7 +1069,6 @@ namespace hazi2
                         VAC.getData();
                         break;
                 }
-
             }
         }
         /*
@@ -1061,6 +1183,8 @@ namespace hazi2
             return;
         }*/
 
+
+         //komment: a utkozeskor massik wallfollow kene --> chance nelkul, megfelelo vizsgalat / jobb, ball wallfollow kivalasztasa
         public async Task escape() //ütközés detektálás nélkül,falak nélkül még
         {
             poz towhere;
@@ -1070,6 +1194,8 @@ namespace hazi2
             //adott pozícióra a porszívó eljuttatása:
             while (aktpozIndex.x != towhere.x || aktpozIndex.y != towhere.y)
             {
+                if (lefedettség.Value == lefedettség.Maximum)
+                    return;
                 if (VACutkozes() == 0)
                 {
                     switch (VAC.getIrany())
@@ -1087,9 +1213,9 @@ namespace hazi2
                             VAC.iranyvalt(irany.le);
                             break;
                     }
-                    while (VAC.getSensor()[0, 2] != "." && VAC.getSensor()[0, 4] != ".")
+                    while (VAC.getSensor()[0, 1] != "." && VAC.getSensor()[0, 3] != ".")
                     {
-                        await wallfollow();
+                        await wallfollow_left();
                     }
                 }
                 VAC.getData();
@@ -1103,7 +1229,7 @@ namespace hazi2
                     VAC.iranyvalt(irany.jobbra); //jobbra megyek
                     VAC.getData();
                     if (VACutkozes() == 0)
-                        continue;
+                        return;
                     VAC.leptet();
                     VACrajzol();
                     await Task.Delay(milisec);
@@ -1114,7 +1240,7 @@ namespace hazi2
                     VAC.iranyvalt(irany.balra); //balra megyek
                     VAC.getData();
                     if (VACutkozes() == 0)
-                        continue;
+                        return;
                     VAC.leptet();
                     VACrajzol();
                     await Task.Delay(milisec);
@@ -1125,7 +1251,7 @@ namespace hazi2
                     VAC.iranyvalt(irany.le); //le megyek
                     VAC.getData();
                     if (VACutkozes() == 0)
-                        continue;
+                        return;
                     VAC.leptet();
                     VACrajzol();
                     await Task.Delay(milisec);
@@ -1136,7 +1262,7 @@ namespace hazi2
                     VAC.iranyvalt(irany.fel); //fel megyek
                     VAC.getData();
                     if (VACutkozes() == 0)
-                        continue;
+                        return;
                     VAC.leptet();
                     VACrajzol();
                     await Task.Delay(milisec);
@@ -1152,7 +1278,7 @@ namespace hazi2
         }
         private void alg2_Click(object sender, RoutedEventArgs e)
         {
-            wallfollow();
+            wallfollow_right();
         }
         private async void alg3_Click(object sender, RoutedEventArgs e)
         {
@@ -1164,8 +1290,23 @@ namespace hazi2
         }
         private async void alg5_Click(object sender, RoutedEventArgs e )
         {
-            int milisec = 300;
-            await wallfollow();
+            int milisec = 100;
+            await wallfollow_left();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await escape();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            while (lefedettség.Value != lefedettség.Maximum)
+            {
+                await snake2();
+                await Task.Delay(milisec);
+                await Task.Delay(milisec);
+                await escape();
+                await Task.Delay(milisec);
+                await Task.Delay(milisec);
+            }
+            /*await wallfollow_left();
             //await circle();
             await snake2();
             await Task.Delay(milisec);
@@ -1218,7 +1359,7 @@ namespace hazi2
             await snake2();
             await Task.Delay(milisec);
             await Task.Delay(milisec);
-            await escape();
+            await escape();*/
         }
 
         private void roomselect_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1227,8 +1368,10 @@ namespace hazi2
             switch (roomName)
             {
                 case "Szoba1":
+                    room = "robot.txt";
                     break;
                 case "Szoba2":
+                    room = "robot2.txt";
                     break;
                 default:
                     break;
