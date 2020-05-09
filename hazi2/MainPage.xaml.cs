@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Shapes;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic;
+using Windows.UI.Xaml.Documents;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -492,6 +493,7 @@ namespace hazi2
         }
 
         // algoritmusok
+        const int milisec = 100;
         public async Task alg_random_egyszererint()
         {
             int milisec = 300;
@@ -533,7 +535,6 @@ namespace hazi2
         public async Task circle()
         {
             int fordulcount = 1;
-            int milisec = 300;
             double lepesszam = 1;
             int chance = 10;
             VAC.getData();
@@ -568,8 +569,7 @@ namespace hazi2
         }
         public async Task wallfollow()
         {
-            int chance = 3;
-            int milisec = 300;
+            int chance = 10;
             VAC.getData();
             VACrajzol();
             while (VACutkozes() != 0) //ütközésig megy
@@ -687,9 +687,7 @@ namespace hazi2
         }
         public async Task snake()
         {
-            int milisec = 300;
             int chance = 2;
-
             int jobbrakigyo = 0;
             VAC.getData();
             VACrajzol();
@@ -852,7 +850,6 @@ namespace hazi2
         }
         public async Task snake2()
         {
-            int milisec = 300;
             int count = 0;
             int chance = 8;
             VAC.getData();
@@ -952,11 +949,11 @@ namespace hazi2
 
             }
         }
-        public async Task escape() //ütközés detektálás nélkül,falak nélkül még
+        /*
+        public async Task escape2() //ütközés detektálás nélkül,falak nélkül még
         {
-            int milisec = 300;
             poz towhere;
-            poz nearest;
+            List<poz> nearest;
             VAC.getData();
             poz aktpozIndex = VAC.getAktpoz();
             nearest = VAC.nearestindex();
@@ -964,14 +961,17 @@ namespace hazi2
             //adott pozícióra a porszívó eljuttatása:
             while (aktpozIndex.x != towhere.x || aktpozIndex.y != towhere.y)
             {
-                while (VACutkozes() != 0)
+                while (VACutkozes() == 0)
                 {
                     VAC.getData();
                     poz DirVector2;
                     aktpozIndex = VAC.convertAktpozToIndex();
                     nearest = VAC.nearestindex();
-                    DirVector2.x = nearest.x - aktpozIndex.x;
-                    DirVector2.y = nearest.y - aktpozIndex.y;
+                    towhere = VAC.smallestdistanceindex();
+                    Random rnd = new Random();
+                    int random = rnd.Next(nearest.Count);
+                    DirVector2.x = nearest[random].x - aktpozIndex.x;
+                    DirVector2.y = nearest[random].y - aktpozIndex.y;
                     VAC.getData();
                     if (DirVector2.x > 0)
                     {
@@ -1005,6 +1005,7 @@ namespace hazi2
                         await Task.Delay(milisec);
                         VAC.getData();
                     }
+                    nearest.Clear();
                 }
                 VAC.getData();
                 poz DirVector;
@@ -1015,6 +1016,9 @@ namespace hazi2
                 if (DirVector.x > 0)
                 {
                     VAC.iranyvalt(irany.jobbra); //jobbra megyek
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                        continue;
                     VAC.leptet();
                     VACrajzol();
                     await Task.Delay(milisec);
@@ -1023,6 +1027,9 @@ namespace hazi2
                 else if (DirVector.x < 0)
                 {
                     VAC.iranyvalt(irany.balra); //balra megyek
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                        continue;
                     VAC.leptet();
                     VACrajzol();
                     await Task.Delay(milisec);
@@ -1031,6 +1038,9 @@ namespace hazi2
                 if (DirVector.y > 0)
                 {
                     VAC.iranyvalt(irany.le); //le megyek
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                        continue;
                     VAC.leptet();
                     VACrajzol();
                     await Task.Delay(milisec);
@@ -1039,6 +1049,94 @@ namespace hazi2
                 else if (DirVector.y < 0)
                 {
                     VAC.iranyvalt(irany.fel); //fel megyek
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                        continue;
+                    VAC.leptet();
+                    VACrajzol();
+                    await Task.Delay(milisec);
+                    VAC.getData();
+                }
+            }
+            return;
+        }*/
+
+        public async Task escape() //ütközés detektálás nélkül,falak nélkül még
+        {
+            poz towhere;
+            VAC.getData();
+            poz aktpozIndex = VAC.getAktpoz();
+            towhere = VAC.smallestdistanceindex(); //ez a legközelebbi be nem járt pozíció
+            //adott pozícióra a porszívó eljuttatása:
+            while (aktpozIndex.x != towhere.x || aktpozIndex.y != towhere.y)
+            {
+                if (VACutkozes() == 0)
+                {
+                    switch (VAC.getIrany())
+                    {
+                        case irany.fel:
+                            VAC.iranyvalt(irany.balra);
+                            break;
+                        case irany.le:
+                            VAC.iranyvalt(irany.jobbra);
+                            break;
+                        case irany.jobbra:
+                            VAC.iranyvalt(irany.fel);
+                            break;
+                        case irany.balra:
+                            VAC.iranyvalt(irany.le);
+                            break;
+                    }
+                    while (VAC.getSensor()[0, 2] != "." && VAC.getSensor()[0, 4] != ".")
+                    {
+                        await wallfollow();
+                    }
+                }
+                VAC.getData();
+                poz DirVector;
+                aktpozIndex = VAC.convertAktpozToIndex();
+                DirVector.x = towhere.x - aktpozIndex.x;
+                DirVector.y = towhere.y - aktpozIndex.y;
+                VAC.getData();
+                if (DirVector.x > 0)
+                {
+                    VAC.iranyvalt(irany.jobbra); //jobbra megyek
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                        continue;
+                    VAC.leptet();
+                    VACrajzol();
+                    await Task.Delay(milisec);
+                    VAC.getData();
+                }
+                else if (DirVector.x < 0)
+                {
+                    VAC.iranyvalt(irany.balra); //balra megyek
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                        continue;
+                    VAC.leptet();
+                    VACrajzol();
+                    await Task.Delay(milisec);
+                    VAC.getData();
+                }
+                if (DirVector.y > 0)
+                {
+                    VAC.iranyvalt(irany.le); //le megyek
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                        continue;
+                    VAC.leptet();
+                    VACrajzol();
+                    await Task.Delay(milisec);
+                    VAC.getData();
+                }
+                else if (DirVector.y < 0)
+                {
+                    VAC.iranyvalt(irany.fel); //fel megyek
+                    VAC.getData();
+                    if (VACutkozes() == 0)
+                        continue;
                     VAC.leptet();
                     VACrajzol();
                     await Task.Delay(milisec);
@@ -1052,24 +1150,21 @@ namespace hazi2
         {
             alg_random_egyszererint();
         }
-
         private void alg2_Click(object sender, RoutedEventArgs e)
         {
             wallfollow();
         }
-
         private async void alg3_Click(object sender, RoutedEventArgs e)
         {
             await circle();
         }
-
         private async void alg4_Click(object sender, RoutedEventArgs e)
         {
             await snake();
         }
         private async void alg5_Click(object sender, RoutedEventArgs e )
         {
-            int milisec = 1000;
+            int milisec = 300;
             await wallfollow();
             //await circle();
             await snake2();
@@ -1088,6 +1183,56 @@ namespace hazi2
             await Task.Delay(milisec);
             await Task.Delay(milisec);
             await escape();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await snake2();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await escape();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await snake2();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await escape();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await snake2();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await escape();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await escape();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await snake2();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await escape();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await escape();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await snake2();
+            await Task.Delay(milisec);
+            await Task.Delay(milisec);
+            await escape();
+        }
+
+        private void roomselect_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string roomName = e.AddedItems[0].ToString();
+            switch (roomName)
+            {
+                case "Szoba1":
+                    break;
+                case "Szoba2":
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

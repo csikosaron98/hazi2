@@ -356,12 +356,13 @@ namespace hazi2
             return Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         }
 
-        public poz nearestindex() //mátrixon belüli index-szel tér vissza
+        public List<poz> nearestindex() //mátrixon belüli index-szel tér vissza
         {
             double smallest = 1000;
             double secondsmallest = 1000;
             poz tmp;
             poz index;
+            List<poz> ind = new List<poz>();
             index.x = 0;
             index.y = 0;
             double valuetmp = 0;
@@ -398,12 +399,13 @@ namespace hazi2
                         {
                             index.x = j;
                             index.y = i;
+                            ind.Add(index);
                         }
 
                     }
                 }
             }
-            return index;
+            return ind;
         }
         
     }

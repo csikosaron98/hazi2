@@ -24,6 +24,12 @@
             <Button x:Name="buttonhatra" Content="Le" Canvas.Left="1050" Canvas.Top="367" Width="70" Height="35" Click="buttonhatra_Click"/>
             <Button x:Name="alg4" Content="Kígyó" Canvas.Left="50" Canvas.Top="464" Width="100" Click="alg4_Click"/>
             <Button x:Name="alg5" Content="Teszt" Canvas.Left="51" Canvas.Top="665" Width="100" Click="alg5_Click"/>
+            <ComboBox x:Name="roomselect" Canvas.Left="32" Canvas.Top="119" Width="137" SelectionChanged="roomselect_SelectionChanged" PlaceholderText="Válassz szobát!">
+                <x:String>Szoba1</x:String>
+                <x:String>Szoba2</x:String>
+                <x:String>Szoba3</x:String>
+                <x:String>Szoba4</x:String>
+            </ComboBox>
         </Canvas>
         <Image Height="100" Width="100"/>
 
