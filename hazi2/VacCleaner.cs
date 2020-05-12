@@ -33,12 +33,12 @@ namespace hazi2
         }
 
         //konstansok
-
-        const int SOR = 15;
-        const int OSZLOP = 15;
+        /*
+        const int SOR = 12;
+        const int OSZLOP = 12;
         const int H = 45;
         const int W = 45;
-
+        */
         //tagváltozók
 
         string[,] palya;
