@@ -9,22 +9,22 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid x:Name="Grid">
-        <Button x:Name="button_beolvas" Content="Pálya beolvasás" Margin="156,194,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button x:Name="button_beolvas" Content="Pálya beolvasás" Margin="70,193,0,0" VerticalAlignment="Top" Click="Button_Click"/>
         <Canvas x:Name="Canvas" Margin="115,0,-115,0">
-            <Button x:Name="alg1" Content="Random" Canvas.Left="50" Canvas.Top="256" Click="alg1_Click" Width="100"/>
-            <Button x:Name="alg2" Content="Falkövetés" Canvas.Left="50" Canvas.Top="320" Click="alg2_Click" Width="100"/>
-            <Button x:Name="alg3" Content="Spirál" Canvas.Left="50" Canvas.Top="389" Click="alg3_Click" Width="100"/>
+            <Button x:Name="alg1" Content="Random" Canvas.Left="-35" Canvas.Top="258" Click="alg1_Click" Width="100"/>
+            <Button x:Name="alg2" Content="Falkövetés" Canvas.Left="-35" Canvas.Top="320" Click="alg2_Click" Width="100"/>
+            <Button x:Name="alg3" Content="Spirál" Canvas.Left="-35" Canvas.Top="384" Click="alg3_Click" Width="100"/>
             <Image Height="100" Width="100"/>
             <Image Height="155" Canvas.Left="23" Canvas.Top="25" Width="155" Source="Assets\kep.png" NineGrid="-3,0,0,0"/>
-            <TextBlock Canvas.Left="65" Canvas.Top="565" TextWrapping="Wrap"><Run Text="Lefedettség"/><LineBreak/><Run/></TextBlock>
-            <ProgressBar x:Name="lefedettség" Height="36" Canvas.Left="37" Canvas.Top="525" Width="128" Value="50" ValueChanged="lefedettség_ValueChanged" Foreground="#FF21960F"/>
-            <Button x:Name="buttonelore" Content="Fel" Canvas.Left="1050" Canvas.Top="272" Width="70" Height="35" Click="buttonelore_Click"/>
-            <Button x:Name="buttonbalra1" Content="Balra" Canvas.Left="968" Canvas.Top="320" Width="70" Height="35" Click="buttonbalra1_Click"/>
-            <Button x:Name="buttonjobbra" Content="Jobbra" Canvas.Left="1130" Canvas.Top="320" Width="70" Height="35" Click="buttonjobbra_Click"/>
-            <Button x:Name="buttonhatra" Content="Le" Canvas.Left="1050" Canvas.Top="367" Width="70" Height="35" Click="buttonhatra_Click"/>
-            <Button x:Name="alg4" Content="Kígyó" Canvas.Left="50" Canvas.Top="464" Width="100" Click="alg4_Click"/>
-            <Button x:Name="alg5" Content="Teszt" Canvas.Left="51" Canvas.Top="665" Width="100" Click="alg5_Click"/>
-            <ComboBox x:Name="roomselect" Canvas.Left="32" Canvas.Top="119" Width="137" SelectionChanged="roomselect_SelectionChanged" PlaceholderText="Válassz szobát!">
+            <TextBlock Canvas.Left="-23" Canvas.Top="570" TextWrapping="Wrap"><Run Text="Lefedettség"/><LineBreak/><Run/></TextBlock>
+            <ProgressBar x:Name="lefedettség" Height="36" Canvas.Left="-51" Canvas.Top="529" Width="128" Value="50" ValueChanged="lefedettség_ValueChanged" Foreground="#FF21960F"/>
+            <Button x:Name="buttonelore" Content="Fel" Canvas.Left="1095" Canvas.Top="273" Width="70" Height="35" Click="buttonelore_Click"/>
+            <Button x:Name="buttonbalra1" Content="Balra" Canvas.Left="1004" Canvas.Top="320" Width="70" Height="35" Click="buttonbalra1_Click"/>
+            <Button x:Name="buttonjobbra" Content="Jobbra" Canvas.Left="1190" Canvas.Top="320" Width="70" Height="35" Click="buttonjobbra_Click"/>
+            <Button x:Name="buttonhatra" Content="Le" Canvas.Left="1095" Canvas.Top="366" Width="70" Height="35" Click="buttonhatra_Click"/>
+            <Button x:Name="alg4" Content="Kígyó" Canvas.Left="-35" Canvas.Top="451" Width="100" Click="alg4_Click"/>
+            <Button x:Name="alg5" Content="Teszt" Canvas.Left="-50" Canvas.Top="669" Width="100" Click="alg5_Click"/>
+            <ComboBox x:Name="roomselect" Canvas.Left="-50" Canvas.Top="118" Width="137" SelectionChanged="roomselect_SelectionChanged" PlaceholderText="Válassz szobát!">
                 <x:String>Szoba 1</x:String>
                 <x:String>Szoba 2</x:String>
                 <x:String>Szoba 3</x:String>
