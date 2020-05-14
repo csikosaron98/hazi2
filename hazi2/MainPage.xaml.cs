@@ -492,7 +492,8 @@ namespace hazi2
         }
 
         // algoritmusok
-        const int milisec = 200;
+        int move_milisec = 200;
+        int think_milisec = 1000;
         int which_baljobb = 0;
         int which_felle = 0;
         int sign = 0;
@@ -553,7 +554,7 @@ namespace hazi2
                     }
                     VAC.leptet();
                     VACrajzol();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                     if (i % fordulcount == 0)
                     {
                         VAC.balra();
@@ -580,7 +581,7 @@ namespace hazi2
                 VAC.getData();
                 VAC.leptet();
                 VACrajzol();
-                await Task.Delay(milisec);
+                await Task.Delay(move_milisec);
                 VAC.getData();
             }
             irany tmp = VAC.getIrany();
@@ -593,7 +594,7 @@ namespace hazi2
             }
             VAC.leptet();
             VACrajzol();
-            await Task.Delay(milisec);
+            await Task.Delay(move_milisec);
             VAC.getData();
             if (quickleft)
             {
@@ -612,7 +613,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                     }
                     else if (VACutkozes() == 0)
                     {
@@ -629,7 +630,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         if (justone)
                         {
                             VAC.balra();
@@ -642,7 +643,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         VAC.balra();
                         VAC.getData();
                         if (VACutkozes() == 0)
@@ -650,7 +651,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                     }                
                 }
             }
@@ -666,7 +667,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                     }
                     else if (VACutkozes() == 0)
                     {
@@ -683,7 +684,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         if (justone)
                         {
                             VAC.balra();
@@ -696,7 +697,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         VAC.balra();
                         VAC.getData();
                         if (VACutkozes() == 0)
@@ -704,7 +705,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                     }          
                 }
             }
@@ -721,7 +722,7 @@ namespace hazi2
                 VAC.getData();
                 VAC.leptet();
                 VACrajzol();
-                await Task.Delay(milisec);
+                await Task.Delay(move_milisec);
                 VAC.getData();
             }
             irany tmp = VAC.getIrany();
@@ -734,7 +735,7 @@ namespace hazi2
             }
             VAC.leptet();
             VACrajzol();
-            await Task.Delay(milisec);
+            await Task.Delay(move_milisec);
             VAC.getData();
             if (quickright)
             {
@@ -753,7 +754,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                     }
                     else if (VACutkozes() == 0)
                     {
@@ -770,7 +771,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         if (justone)
                         {
                             VAC.jobbra();
@@ -783,7 +784,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         VAC.jobbra();
                         VAC.getData();
                         if (VACutkozes() == 0)
@@ -791,7 +792,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                     }
                 }
             }
@@ -808,7 +809,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                     }
                     else if (VACutkozes() == 0)
                     {
@@ -825,7 +826,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         if (justone)
                         {
                             VAC.jobbra();
@@ -838,7 +839,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         VAC.jobbra();
                         VAC.getData();
                         if (VACutkozes() == 0)
@@ -846,7 +847,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                     }
                 }
             }
@@ -862,7 +863,7 @@ namespace hazi2
                 VAC.getData();
                 VAC.leptet();
                 VACrajzol();
-                await Task.Delay(milisec);
+                await Task.Delay(move_milisec);
                 VAC.getData();
             }
             
@@ -876,7 +877,7 @@ namespace hazi2
             }
             VAC.leptet();
             VACrajzol();
-            await Task.Delay(milisec);
+            await Task.Delay(move_milisec);
             VAC.getData();
             if (quickleft)
             {
@@ -894,7 +895,7 @@ namespace hazi2
                     VAC.leptet();
                     VACrajzol();
                     VAC.getData();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                 }
                 else if (VACutkozes() == 0)
                 {
@@ -911,7 +912,7 @@ namespace hazi2
                     VAC.leptet();
                     VACrajzol();
                     VAC.getData();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                     if (justone)
                     {
                         VAC.balra();
@@ -925,7 +926,7 @@ namespace hazi2
                     VAC.leptet();
                     VACrajzol();
                     VAC.getData();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                     VAC.balra();
                     VAC.getData();
                     if (VACutkozes() == 0)
@@ -933,7 +934,7 @@ namespace hazi2
                     VAC.leptet();
                     VACrajzol();
                     VAC.getData();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                 }
                 if (balravizsgal == 1) // nem volt szinkronban a tmp vizsgálat és a robot léptetés
                 {
@@ -1010,7 +1011,7 @@ namespace hazi2
                 VAC.getData();
                 VAC.leptet();
                 VACrajzol();
-                await Task.Delay(milisec);
+                await Task.Delay(move_milisec);
                 VAC.getData();
             }
             bool quickright = false;
@@ -1036,7 +1037,7 @@ namespace hazi2
                     VAC.leptet();
                     VACrajzol();
                     VAC.getData();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                 }
                 else if (VACutkozes() == 0)
                 {
@@ -1048,7 +1049,7 @@ namespace hazi2
                     VAC.leptet();
                     VACrajzol();
                     VAC.getData();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                 }
                 else if (alakzatvizsgal(VAC.getSensor()[0, 3]) != 0 && VACutkozes() != 0)
                 {
@@ -1061,7 +1062,7 @@ namespace hazi2
                     VAC.leptet();
                     VACrajzol();
                     VAC.getData();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                 }
                 if (jobbravizsgal == 1) // nem volt szinkronban a tmp vizsgálat és a robot léptetés
                 {
@@ -1141,7 +1142,7 @@ namespace hazi2
                     VAC.getData();
                     VAC.leptet();
                     VACrajzol();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                     VAC.getData();
                 }
 
@@ -1170,7 +1171,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         if (jobbrakigyo == 1)
                         {
                             VAC.jobbra();
@@ -1203,7 +1204,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         if (jobbrakigyo == 1)
                         {
                             VAC.jobbra();
@@ -1236,7 +1237,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         if (jobbrakigyo == 1)
                         {
                             VAC.jobbra();
@@ -1270,7 +1271,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         if (jobbrakigyo == 1)
                         {
                             VAC.jobbra();
@@ -1308,7 +1309,7 @@ namespace hazi2
                     VAC.getData();
                     VAC.leptet();
                     VACrajzol();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                     tmp_bal.x = VAC.getAktpoz().x - H;
                     tmp_bal.y = VAC.getAktpoz().y;
                     tmp_jobb.x = VAC.getAktpoz().x + H;
@@ -1404,7 +1405,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         VAC.jobbra();
                         VAC.getData();
                         break;
@@ -1421,7 +1422,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         VAC.balra();
                         VAC.getData();
                         break;
@@ -1438,7 +1439,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         VAC.jobbra();
                         VAC.getData();
                         break;
@@ -1455,7 +1456,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         VAC.balra();
                         VAC.getData();
                         break;
@@ -1480,7 +1481,7 @@ namespace hazi2
                     VAC.getData();
                     VAC.leptet(); 
                     VACrajzol();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                     tmp_bal.x = VAC.getAktpoz().x - H;
                     tmp_bal.y = VAC.getAktpoz().y;
                     tmp_jobb.x = VAC.getAktpoz().x + H;
@@ -1575,7 +1576,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         VAC.balra();
                         VAC.getData();
                         break;
@@ -1592,7 +1593,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         VAC.jobbra();
                         VAC.getData();
                         break;
@@ -1609,7 +1610,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         VAC.balra();
                         VAC.getData();
                         break;
@@ -1626,7 +1627,7 @@ namespace hazi2
                         VAC.leptet();
                         VACrajzol();
                         VAC.getData();
-                        await Task.Delay(milisec);
+                        await Task.Delay(move_milisec);
                         VAC.jobbra();
                         VAC.getData();
                         break;
@@ -1637,6 +1638,7 @@ namespace hazi2
         //komment: a utkozeskor masik wallfollow kene --> chance nelkul, megfelelo vizsgalat / jobb, ball wallfollow kivalasztasa
         public async Task escape() //HIBA(05.13): hogyan kene vizsgalni merre csinalja a wallfollowt?
         {
+            int count = 0;
             poz towhere;
             VAC.getData();
             poz aktpozIndex = VAC.getAktpoz();
@@ -1657,20 +1659,70 @@ namespace hazi2
                 }
                 if (VACutkozes() == 0)
                 {
+                    poz check = VAC.getAktpoz();
                     switch (VAC.getIrany())
                     {
+                       
                         case irany.fel:
-                            await wallfollow_left_escape();
-                            break;
+                            {
+                                if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
+                                    count++;
+                                if (count == 2)
+                                {
+                                    await wallfollow_right_escape();
+                                    count = 0;
+                                }
+                                else
+                                {
+                                    await wallfollow_left_escape();
+                                }
+                                break;
+                            }
                         case irany.le:
-                            await wallfollow_right_escape();
-                            break;
+                            {
+                                if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
+                                    count++;
+                                if (count == 2)
+                                {
+                                    await wallfollow_left_escape();
+                                    count = 0;
+                                }
+                                else
+                                {
+                                    await wallfollow_right_escape();
+                                }
+                                break;
+                            }
                         case irany.jobbra:
-                            await wallfollow_right_escape();
-                            break;
+                            {
+                                if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
+                                    count++;
+                                if (count == 2)
+                                {
+                                    await wallfollow_left_escape();
+                                    count = 0;
+                                }
+                                else
+                                {
+                                    await wallfollow_right_escape();
+                                }
+                                break;
+                            }
                         case irany.balra:
-                            await wallfollow_left_escape();
-                            break;
+                            {
+                                if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
+                                    count++;
+                                if (count == 2)
+                                {
+                                    await wallfollow_right_escape();
+                                    count = 0;
+                                }
+                                else
+                                {
+                                    await wallfollow_left_escape();
+                                }                               
+                                break;
+                            }
                     }
                 }
                 VAC.getData();
@@ -1690,7 +1742,7 @@ namespace hazi2
                     VAC.leptet();
                     DirVector.x--;
                     VACrajzol();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                     VAC.getData();
                 }
                 while (DirVector.x < 0)
@@ -1702,7 +1754,7 @@ namespace hazi2
                     VAC.leptet();
                     DirVector.x++;
                     VACrajzol();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                     VAC.getData();
                 }
                 while (DirVector.y > 0)
@@ -1714,7 +1766,7 @@ namespace hazi2
                     VAC.leptet();
                     DirVector.y--;
                     VACrajzol();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                     VAC.getData();
                 }
                 while (DirVector.y < 0)
@@ -1726,7 +1778,7 @@ namespace hazi2
                     VAC.leptet();
                     DirVector.y++;
                     VACrajzol();
-                    await Task.Delay(milisec);
+                    await Task.Delay(move_milisec);
                     VAC.getData();
                 }
             }
@@ -1750,13 +1802,12 @@ namespace hazi2
         }
         private async void alg5_Click(object sender, RoutedEventArgs e )
         {
-            int milisec2 = 1000;
             await wallfollow_left();
-            await Task.Delay(milisec2);
-            await Task.Delay(milisec2);
+            await Task.Delay(think_milisec);
+            await Task.Delay(think_milisec);
             await escape();
-            await Task.Delay(milisec2);
-            await Task.Delay(milisec2);
+            await Task.Delay(think_milisec);
+            await Task.Delay(think_milisec);
             while (lefedettség.Value != lefedettség.Maximum)
             {
                 while (true)
@@ -1779,11 +1830,11 @@ namespace hazi2
                         await snake2_left();
                     }
                 }
-                await Task.Delay(milisec2);
-                await Task.Delay(milisec2);
+                await Task.Delay(think_milisec);
+                await Task.Delay(think_milisec);
                 await escape();
-                await Task.Delay(milisec2);
-                await Task.Delay(milisec2);
+                await Task.Delay(think_milisec);
+                await Task.Delay(think_milisec);
             }
         }
 
@@ -1804,6 +1855,18 @@ namespace hazi2
                 default:
                     break;
             }
+        }
+
+        private void speed_plus_Click(object sender, RoutedEventArgs e)
+        {
+            move_milisec = move_milisec - 50;
+            think_milisec = think_milisec - 100;
+        }
+
+        private void speed_minus_Click(object sender, RoutedEventArgs e)
+        {
+            move_milisec = move_milisec + 50;
+            think_milisec = think_milisec + 100;
         }
     }
 

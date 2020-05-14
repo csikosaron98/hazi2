@@ -11,10 +11,10 @@ oo................oo
 oo...o............oo
 oo...o............oo
 oo...o............oo
-oo...o..x.........oo
+oo...o............oo
 oo...o............oo
 oo...o.......ooooooo
-oo...o............oo
+oo...o....x.......oo
 oo...o............oo
 oooooooooooooooooooo
 oooooooooooooooooooo
