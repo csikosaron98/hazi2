@@ -8,13 +8,13 @@ oo.....ooooooooooooo
 oo................oo
 oooooooooo........oo
 oo................oo
+oo...o......o.....oo
+oo...o...ooooo....oo
+oo...o......oo....oo
 oo...o............oo
-oo...o......oo....oo
-oo...o......oo....oo
-oo...o..x.........oo
 oo...o........oooooo
 oo...o........o...oo
 oo...o............oo
-oo...o............oo
+oo..xo............oo
 oooooooooooooooooooo
 oooooooooooooooooooo

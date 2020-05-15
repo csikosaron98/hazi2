@@ -66,14 +66,13 @@ namespace hazi2
                 this.y = y;
             }
         }
-
         public MainPage()
         {
             this.InitializeComponent();
         }
         private void Button_Click(object sender, RoutedEventArgs e) //pálya inic gomb event handler -> tömbbe
         {
-            int x = 4*H;
+            int x = 4 * H;
             int y = H;
             StreamReader reader = new StreamReader(room);
             for (int i = 0; i < SOR; i++)
@@ -110,8 +109,8 @@ namespace hazi2
                     }
                     x += W;
                 }
-                if (x == (SOR+4)*H)
-                    x = 4*H;
+                if (x == (SOR + 4) * H)
+                    x = 4 * H;
                 y += H;
             }
         }
@@ -127,7 +126,7 @@ namespace hazi2
                     {
                         int k = 0;
                         int l = 0;
-                        oszlop = (VAC.getAktpoz().x - 4*H) / H - 2;
+                        oszlop = (VAC.getAktpoz().x - 4 * H) / H - 2;
                         sor = (VAC.getAktpoz().y - H) / H - 1;
                         for (int i = sor; i > sor - 2; i--)
                         {
@@ -135,7 +134,7 @@ namespace hazi2
                             {
                                 if (alakzatvizsgal(VAC.getSensor()[k, l]) == 0)
                                 {
-                                    sens.Add(new poz((j * W) + 4*H, (i * H) + H));
+                                    sens.Add(new poz((j * W) + 4 * H, (i * H) + H));
                                 }
                                 l++;
                             }
@@ -148,7 +147,7 @@ namespace hazi2
                     {
                         int k = 0;
                         int l = 0;
-                        oszlop = (VAC.getAktpoz().x - 4*H) / H + 2;
+                        oszlop = (VAC.getAktpoz().x - 4 * H) / H + 2;
                         sor = (VAC.getAktpoz().y - H) / H + 1;
                         for (int i = sor; i < sor + 2; i++)
                         {
@@ -157,7 +156,7 @@ namespace hazi2
 
                                 if (alakzatvizsgal(VAC.getSensor()[k, l]) == 0)
                                 {
-                                    sens.Add(new poz((j * W) + 4*H, (i * H) + H));
+                                    sens.Add(new poz((j * W) + 4 * H, (i * H) + H));
                                 }
                                 l++;
                             }
@@ -170,7 +169,7 @@ namespace hazi2
                     {
                         int k = 0;
                         int l = 0;
-                        oszlop = (VAC.getAktpoz().x - 4*H) / H + 1;
+                        oszlop = (VAC.getAktpoz().x - 4 * H) / H + 1;
                         sor = (VAC.getAktpoz().y - H) / H - 2;
                         for (int j = oszlop; j < oszlop + 2; j++)
                         {
@@ -179,7 +178,7 @@ namespace hazi2
 
                                 if (alakzatvizsgal(VAC.getSensor()[k, l]) == 0)
                                 {
-                                    sens.Add(new poz((j * W) + 4*H, (i * H) + H));
+                                    sens.Add(new poz((j * W) + 4 * H, (i * H) + H));
                                 }
                                 l++;
                             }
@@ -192,7 +191,7 @@ namespace hazi2
                     {
                         int k = 0;
                         int l = 0;
-                        oszlop = (VAC.getAktpoz().x - 4*H) / H - 1;
+                        oszlop = (VAC.getAktpoz().x - 4 * H) / H - 1;
                         sor = (VAC.getAktpoz().y - H) / H + 2;
                         for (int j = oszlop; j > oszlop - 2; j--)
                         {
@@ -201,7 +200,7 @@ namespace hazi2
 
                                 if (alakzatvizsgal(VAC.getSensor()[k, l]) == 0)
                                 {
-                                    sens.Add(new poz((j * W) + 4*H, (i * H) + H));
+                                    sens.Add(new poz((j * W) + 4 * H, (i * H) + H));
                                 }
                                 l++;
                             }
@@ -601,10 +600,20 @@ namespace hazi2
                 VAC.balra();
                 VAC.getData();
             }
+            if (VACutkozes() == 0)
+            {
+                if (cnt == 0)
+                {
+                    check = VAC.getAktpoz();
+                    cnt++;
+                }
+            }
             if (tmp == irany.balra)
             {
                 while (VAC.getAktpoz().y != now.y)
                 {
+                    if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
+                        count++;
                     if (VAC.getAktpoz().y == now.y)
                         return;
                     if (alakzatvizsgal(VAC.getSensor()[0, 1]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
@@ -652,13 +661,15 @@ namespace hazi2
                         VACrajzol();
                         VAC.getData();
                         await Task.Delay(move_milisec);
-                    }                
+                    }
                 }
             }
             if (tmp == irany.fel)
             {
                 while (VAC.getAktpoz().x != now.x)
                 {
+                    if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
+                        count++;
                     if (VAC.getAktpoz().x == now.x)
                         return;
                     if (alakzatvizsgal(VAC.getSensor()[0, 1]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
@@ -706,13 +717,15 @@ namespace hazi2
                         VACrajzol();
                         VAC.getData();
                         await Task.Delay(move_milisec);
-                    }          
+                    }
                 }
             }
             if (tmp == irany.le)
             {
                 while (VAC.getAktpoz().x != now.x)
                 {
+                    if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
+                        count++;
                     if (VAC.getAktpoz().x == now.x)
                         return;
                     if (alakzatvizsgal(VAC.getSensor()[0, 1]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
@@ -767,6 +780,8 @@ namespace hazi2
             {
                 while (VAC.getAktpoz().y != now.y)
                 {
+                    if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
+                        count++;
                     if (VAC.getAktpoz().y == now.y)
                         return;
                     if (alakzatvizsgal(VAC.getSensor()[0, 1]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
@@ -837,7 +852,7 @@ namespace hazi2
             bool quickright = false;
             VAC.balra();
             VAC.getData();
-            if (VAC.getSensor()[0,3] == ".")
+            if (VAC.getSensor()[0, 3] == ".")
             {
                 quickright = true;
             }
@@ -850,10 +865,20 @@ namespace hazi2
                 VAC.jobbra();
                 VAC.getData();
             }
+            if (VACutkozes() == 0)
+            {
+                if (cnt == 0)
+                {
+                    check = VAC.getAktpoz();
+                    cnt++;
+                }
+            }
             if (tmp == irany.jobbra)
             {
                 while (VAC.getAktpoz().y != now.y)
                 {
+                    if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
+                        count++;
                     if (VAC.getAktpoz().y == now.y)
                         return;
                     if (alakzatvizsgal(VAC.getSensor()[0, 3]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
@@ -908,6 +933,8 @@ namespace hazi2
             {
                 while (VAC.getAktpoz().y != now.y)
                 {
+                    if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
+                        count++;
                     if (VAC.getAktpoz().y == now.y)
                         return;
                     if (alakzatvizsgal(VAC.getSensor()[0, 3]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
@@ -962,6 +989,8 @@ namespace hazi2
             {
                 while (VAC.getAktpoz().x != now.x)
                 {
+                    if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
+                        count++;
                     if (VAC.getAktpoz().x == now.x)
                         return;
                     if (alakzatvizsgal(VAC.getSensor()[0, 3]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
@@ -1016,6 +1045,8 @@ namespace hazi2
             {
                 while (VAC.getAktpoz().x != now.x)
                 {
+                    if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
+                        count++;
                     if (VAC.getAktpoz().x == now.x)
                         return;
                     if (alakzatvizsgal(VAC.getSensor()[0, 3]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
@@ -1081,7 +1112,7 @@ namespace hazi2
                 await Task.Delay(move_milisec);
                 VAC.getData();
             }
-            
+
             bool quickleft = false;
             now = VAC.getAktpoz();
             VAC.jobbra();
@@ -1116,7 +1147,7 @@ namespace hazi2
                 {
                     bool justone = false;
                     VAC.getData();
-                    if (VAC.getSensor()[0,3] == ".")
+                    if (VAC.getSensor()[0, 3] == ".")
                     {
                         justone = true;
                     }
@@ -1521,18 +1552,46 @@ namespace hazi2
                     poz tmp_jobb;
                     poz tmp_fel;
                     poz tmp_le;
+                    tmp_bal.x = 0;
+                    tmp_bal.y = 0;
+                    tmp_jobb.x = 0;
+                    tmp_jobb.y = 0;
+                    tmp_fel.x = 0;
+                    tmp_fel.y = 0;
+                    tmp_le.x = 0;
+                    tmp_le.y = 0;
                     VAC.getData();
                     VAC.leptet();
                     VACrajzol();
                     await Task.Delay(move_milisec);
-                    tmp_bal.x = VAC.getAktpoz().x - H;
-                    tmp_bal.y = VAC.getAktpoz().y;
-                    tmp_jobb.x = VAC.getAktpoz().x + H;
-                    tmp_jobb.y = VAC.getAktpoz().y;
-                    tmp_fel.x = VAC.getAktpoz().x;
-                    tmp_fel.y = VAC.getAktpoz().y - W;
-                    tmp_le.x = VAC.getAktpoz().x;
-                    tmp_le.y = VAC.getAktpoz().y + W;
+                    if (VAC.getIrany() == irany.fel)
+                    {
+                        tmp_bal.x = VAC.getAktpoz().x - H;
+                        tmp_bal.y = VAC.getAktpoz().y - W;
+                        tmp_jobb.x = VAC.getAktpoz().x + H;
+                        tmp_jobb.y = VAC.getAktpoz().y -W;
+                    }
+                    if (VAC.getIrany() == irany.le)
+                    {
+                        tmp_bal.x = VAC.getAktpoz().x - H;
+                        tmp_bal.y = VAC.getAktpoz().y + W;
+                        tmp_jobb.x = VAC.getAktpoz().x + H;
+                        tmp_jobb.y = VAC.getAktpoz().y + W;
+                    }
+                    if (VAC.getIrany() == irany.balra)
+                    {
+                        tmp_fel.x = VAC.getAktpoz().x - H;
+                        tmp_fel.y = VAC.getAktpoz().y - W;
+                        tmp_le.x = VAC.getAktpoz().x - H;
+                        tmp_le.y = VAC.getAktpoz().y + W;
+                    }
+                    if (VAC.getIrany() == irany.jobbra)
+                    {
+                        tmp_fel.x = VAC.getAktpoz().x + H;
+                        tmp_fel.y = VAC.getAktpoz().y - W;
+                        tmp_le.x = VAC.getAktpoz().x + H;
+                        tmp_le.y = VAC.getAktpoz().y + W;
+                    }
                     if (VAC.getIrany() == irany.fel)
                     {
                         if (VAC.getJartrect().Contains(tmp_bal))
@@ -1586,6 +1645,8 @@ namespace hazi2
                         chance--;
                         if (chance == 0)
                         {
+                            which_felle = 0;
+                            which_baljobb = 0;
                             sign = 1;
                             return;
                         }
@@ -1593,18 +1654,25 @@ namespace hazi2
                 }
                 if (VACutkozes() == 0)
                 {
-                    if (which_baljobb > 0)
+                    /*
+                    if (VAC.getIrany() == irany.jobbra || VAC.getIrany() == irany.balra)
                     {
-                        break;
+                        if (which_felle > 0)
+                        {
+                            break;
+                        }
                     }
-                    /*if (which_felle < 0) vizgsalat a fol le kigyohoz
+                    if (VAC.getIrany() == irany.fel || VAC.getIrany() == irany.le)
                     {
-                        break;
+                        if (which_baljobb > 0)
+                        {
+                            break;
+                        }
                     }*/
                     count++;
                 }
-                which_baljobb = 0;
                 which_felle = 0;
+                which_baljobb = 0;
                 switch (VAC.getIrany())
                 {
                     case irany.fel:
@@ -1684,27 +1752,54 @@ namespace hazi2
             int count = 0;
             VAC.getData();
             VACrajzol();
-
             while (true)
-            {       
+            {
                 while (VACutkozes() != 0) //mindig ütközésig megy, többi kód csak fordulás
                 {
                     poz tmp_bal;
                     poz tmp_jobb;
                     poz tmp_fel;
                     poz tmp_le;
+                    tmp_bal.x = 0;
+                    tmp_bal.y = 0;
+                    tmp_jobb.x = 0;
+                    tmp_jobb.y = 0;
+                    tmp_fel.x = 0;
+                    tmp_fel.y = 0;
+                    tmp_le.x = 0;
+                    tmp_le.y = 0;
                     VAC.getData();
-                    VAC.leptet(); 
+                    VAC.leptet();
                     VACrajzol();
                     await Task.Delay(move_milisec);
-                    tmp_bal.x = VAC.getAktpoz().x - H;
-                    tmp_bal.y = VAC.getAktpoz().y;
-                    tmp_jobb.x = VAC.getAktpoz().x + H;
-                    tmp_jobb.y = VAC.getAktpoz().y;
-                    tmp_fel.x = VAC.getAktpoz().x;
-                    tmp_fel.y = VAC.getAktpoz().y - W;
-                    tmp_le.x = VAC.getAktpoz().x;
-                    tmp_le.y = VAC.getAktpoz().y + W;
+                    if (VAC.getIrany() == irany.fel)
+                    {
+                        tmp_bal.x = VAC.getAktpoz().x - H;
+                        tmp_bal.y = VAC.getAktpoz().y - W;
+                        tmp_jobb.x = VAC.getAktpoz().x + H;
+                        tmp_jobb.y = VAC.getAktpoz().y - W;
+                    }
+                    if (VAC.getIrany() == irany.le)
+                    {
+                        tmp_bal.x = VAC.getAktpoz().x - H;
+                        tmp_bal.y = VAC.getAktpoz().y + W;
+                        tmp_jobb.x = VAC.getAktpoz().x + H;
+                        tmp_jobb.y = VAC.getAktpoz().y + W;
+                    }
+                    if (VAC.getIrany() == irany.balra)
+                    {
+                        tmp_fel.x = VAC.getAktpoz().x - H;
+                        tmp_fel.y = VAC.getAktpoz().y - W;
+                        tmp_le.x = VAC.getAktpoz().x - H;
+                        tmp_le.y = VAC.getAktpoz().y + W;
+                    }
+                    if (VAC.getIrany() == irany.jobbra)
+                    {
+                        tmp_fel.x = VAC.getAktpoz().x + H;
+                        tmp_fel.y = VAC.getAktpoz().y - W;
+                        tmp_le.x = VAC.getAktpoz().x + H;
+                        tmp_le.y = VAC.getAktpoz().y + W;
+                    }
                     if (VAC.getIrany() == irany.fel)
                     {
                         if (VAC.getJartrect().Contains(tmp_bal))
@@ -1757,6 +1852,8 @@ namespace hazi2
                         chance--;
                         if (chance == 0)
                         {
+                            which_felle = 0;
+                            which_baljobb = 0;
                             sign = 1;
                             return;
                         }
@@ -1764,101 +1861,113 @@ namespace hazi2
                 }
                 if (VACutkozes() == 0)
                 {
-                    if (which_baljobb < 0)
-                    {
-                        break;
-                    }
-                    /*if (which_felle > 0) vizsgálat a fol le kigyohoz
-                    {
-                        break;
-                    }*/
-                    count++;
+                        if (VAC.getIrany() == irany.jobbra || VAC.getIrany() == irany.balra)
+                        {
+                            if (which_felle > 0)
+                            {
+                                break;
+                            }
+                        }
+                        if (VAC.getIrany() == irany.fel || VAC.getIrany() == irany.le)
+                        {
+                            if (which_baljobb > 0)
+                            {
+                                break;
+                            }
+                        }
+                        count++;
                 }
                 which_baljobb = 0;
                 which_felle = 0;
-                switch (VAC.getIrany())
-                {
-                    case irany.fel:
-                        VAC.balra();
-                        VAC.getData();
-                        if (VACutkozes() == 0)
-                        {
-                            VAC.jobbra();
-                            VAC.jobbra();
-                            VAC.getData();
-                            continue;
-                        }
-                        VAC.leptet();
-                        VACrajzol();
-                        VAC.getData();
-                        await Task.Delay(move_milisec);
-                        VAC.balra();
-                        VAC.getData();
-                        break;
-                    case irany.le:
-                        VAC.jobbra();
-                        VAC.getData();
-                        if (VACutkozes() == 0)
-                        {
-                            VAC.balra();
+                    switch (VAC.getIrany())
+                    {
+                        case irany.fel:
                             VAC.balra();
                             VAC.getData();
-                            continue;
-                        }
-                        VAC.leptet();
-                        VACrajzol();
-                        VAC.getData();
-                        await Task.Delay(move_milisec);
-                        VAC.jobbra();
-                        VAC.getData();
-                        break;
-                    case irany.jobbra:
-                        VAC.balra();
-                        VAC.getData();
-                        if (VACutkozes() == 0)
-                        {
-                            VAC.jobbra();
-                            VAC.jobbra();
+                            if (VACutkozes() == 0)
+                            {
+                                VAC.jobbra();
+                                VAC.jobbra();
+                                VAC.getData();
+                                continue;
+                            }
+                            VAC.leptet();
+                            VACrajzol();
                             VAC.getData();
-                            continue;
-                        }
-                        VAC.leptet();
-                        VACrajzol();
-                        VAC.getData();
-                        await Task.Delay(move_milisec);
-                        VAC.balra();
-                        VAC.getData();
-                        break;
-                    case irany.balra:
-                        VAC.jobbra();
-                        VAC.getData();
-                        if (VACutkozes() == 0)
-                        {
-                            VAC.balra();
+                            await Task.Delay(move_milisec);
                             VAC.balra();
                             VAC.getData();
-                            continue;
-                        }
-                        VAC.leptet();
-                        VACrajzol();
-                        VAC.getData();
-                        await Task.Delay(move_milisec);
-                        VAC.jobbra();
-                        VAC.getData();
-                        break;
-                }
+                            break;
+                        case irany.le:
+                            VAC.jobbra();
+                            VAC.getData();
+                            if (VACutkozes() == 0)
+                            {
+                                VAC.balra();
+                                VAC.balra();
+                                VAC.getData();
+                                continue;
+                            }
+                            VAC.leptet();
+                            VACrajzol();
+                            VAC.getData();
+                            await Task.Delay(move_milisec);
+                            VAC.jobbra();
+                            VAC.getData();
+                            break;
+                        case irany.jobbra:
+                            VAC.balra();
+                            VAC.getData();
+                            if (VACutkozes() == 0)
+                            {
+                                VAC.jobbra();
+                                VAC.jobbra();
+                                VAC.getData();
+                                continue;
+                            }
+                            VAC.leptet();
+                            VACrajzol();
+                            VAC.getData();
+                            await Task.Delay(move_milisec);
+                            VAC.balra();
+                            VAC.getData();
+                            break;
+                        case irany.balra:
+                            VAC.jobbra();
+                            VAC.getData();
+                            if (VACutkozes() == 0)
+                            {
+                                VAC.balra();
+                                VAC.balra();
+                                VAC.getData();
+                                continue;
+                            }
+                            VAC.leptet();
+                            VACrajzol();
+                            VAC.getData();
+                            await Task.Delay(move_milisec);
+                            VAC.jobbra();
+                            VAC.getData();
+                            break;
+                    }
             }
         }
 
         //komment: a utkozeskor masik wallfollow kene --> chance nelkul, megfelelo vizsgalat / jobb, ball wallfollow kivalasztasa
+        int cnt = 0; //az ütközésnél segédváltozó
+        int count;
+        poz check; //üzközésnél segédváltozó
         public async Task escape() //HIBA(05.13): hogyan kene vizsgalni merre csinalja a wallfollowt?
         {
-            int count = 0;
+            int washere1 = 0;
+            int washere2 = 0;
+            count = 0;
             poz towhere;
             VAC.getData();
             poz aktpozIndex = VAC.getAktpoz();
             towhere = VAC.smallestdistanceindex(); //ez a legközelebbi be nem járt pozíció
             //adott pozícióra a porszívó eljuttatása:
+            cnt = 0;
             while (aktpozIndex.x != towhere.x || aktpozIndex.y != towhere.y)
             {
                 if (lefedettség.Value == lefedettség.Maximum)
@@ -1874,10 +1983,13 @@ namespace hazi2
                 }
                 if (VACutkozes() == 0)
                 {
-                    poz check = VAC.getAktpoz();
-                    switch (VAC.getIrany())
+                    if (cnt == 0 || (washere1 == 1 && washere2 == 1))
                     {
-                       
+                        check = VAC.getAktpoz();
+                        cnt++;
+                    }
+                    switch (VAC.getIrany())
+                    { 
                         case irany.fel:
                             {
                                 if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
@@ -1886,10 +1998,12 @@ namespace hazi2
                                 {
                                     await wallfollow_right_escape();
                                     count = 0;
+                                    washere1 = 1;
                                 }
                                 else
                                 {
                                     await wallfollow_left_escape();
+                                    washere2 = 1;
                                 }
                                 break;
                             }
@@ -1935,7 +2049,7 @@ namespace hazi2
                                 else
                                 {
                                     await wallfollow_left_escape();
-                                }                               
+                                }
                                 break;
                             }
                     }
@@ -2013,9 +2127,9 @@ namespace hazi2
         }
         private async void alg4_Click(object sender, RoutedEventArgs e)
         {
-            await snake2_right();
+            await snake2_left();
         }
-        private async void alg5_Click(object sender, RoutedEventArgs e )
+        private async void alg5_Click(object sender, RoutedEventArgs e)
         {
             await wallfollow_left();
             await Task.Delay(think_milisec);
@@ -2025,26 +2139,27 @@ namespace hazi2
             await Task.Delay(think_milisec);
             while (lefedettség.Value != lefedettség.Maximum)
             {
-                while (true)
-                {
-                    if (lefedettség.Value == lefedettség.Maximum)
-                    {
-                        return;
-                    }
-                    if (sign == 1)
-                    {
-                        sign = 0;
-                        break;
-                    }
-                    if (which_baljobb <= 0 )//|| which_felle >= 0)
-                    {
-                        await snake2_right();
-                    }
-                    if (which_baljobb > 0 )//|| which_felle < 0)
-                    {
-                        await snake2_left();
-                    }
-                }
+                await snake2_right();
+                /* while (true)
+                 {
+                     if (lefedettség.Value == lefedettség.Maximum)
+                     {
+                         return;
+                     }
+                     if (sign == 1)
+                     {
+                         sign = 0;
+                         break;
+                     }
+                     if (which_baljobb <= 0 || which_felle <= 0)
+                     {
+                         await snake2_right();
+                     }
+                     if (which_baljobb > 0 || which_felle > 0)
+                     {
+                         await snake2_left();
+                     }
+                 }*/
                 await Task.Delay(think_milisec);
                 await Task.Delay(think_milisec);
                 await escape();
@@ -2080,8 +2195,8 @@ namespace hazi2
 
         private void speed_minus_Click(object sender, RoutedEventArgs e)
         {
-            move_milisec = move_milisec + 50;
-            think_milisec = think_milisec + 100;
+            move_milisec = move_milisec + 25;
+            think_milisec = think_milisec + 150;
         }
     }
 

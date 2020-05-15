@@ -30,9 +30,10 @@
                 <x:String>Szoba 3</x:String>
                 <x:String>Szoba 4</x:String>
             </ComboBox>
-            <TextBox Canvas.Left="1035" Canvas.Top="120" Text="Sebesség:" TextWrapping="Wrap" Width="112" Background="#66FFFFFF" BorderBrush="#66FFFFFF"/>
+            <TextBox Canvas.Left="1035" Canvas.Top="126" Text="Sebesség:" TextWrapping="Wrap" Width="112" Background="#66FFFFFF" BorderBrush="#66FFFFFF"/>
             <Button x:Name="speed_plus" Content="+" Canvas.Left="1039" Canvas.Top="158" Height="35" Width="35" Click="speed_plus_Click"/>
             <Button x:Name="speed_minus" Content="-" Canvas.Left="1095" Canvas.Top="158" Height="35" Width="35" Click="speed_minus_Click"/>
+            <TextBox Canvas.Left="1035" Canvas.Top="236" Text="Manuális irányítás:" TextWrapping="Wrap" Width="152" Background="#66FFFFFF" BorderBrush="#66FFFFFF"/>
         </Canvas>
         <Image Height="100" Width="100"/>
 
