@@ -709,7 +709,115 @@ namespace hazi2
                     }          
                 }
             }
-           
+            if (tmp == irany.le)
+            {
+                while (VAC.getAktpoz().x != now.x)
+                {
+                    if (VAC.getAktpoz().x == now.x)
+                        return;
+                    if (alakzatvizsgal(VAC.getSensor()[0, 1]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
+                    {
+                        VAC.getData();
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                    }
+                    else if (VACutkozes() == 0)
+                    {
+                        bool justone = false;
+                        VAC.getData();
+                        if (VAC.getSensor()[0, 3] == ".")
+                        {
+                            justone = true;
+                        }
+                        VAC.jobbra();
+                        VAC.getData();
+                        if (VACutkozes() == 0)
+                            continue;
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                        if (justone)
+                        {
+                            VAC.balra();
+                            VAC.getData();
+                        }
+                    }
+                    else if (alakzatvizsgal(VAC.getSensor()[0, 1]) != 0 && VACutkozes() != 0)
+                    {
+                        VAC.getData();
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                        VAC.balra();
+                        VAC.getData();
+                        if (VACutkozes() == 0)
+                            continue;
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                    }
+                }
+            }
+            if (tmp == irany.jobbra)
+            {
+                while (VAC.getAktpoz().y != now.y)
+                {
+                    if (VAC.getAktpoz().y == now.y)
+                        return;
+                    if (alakzatvizsgal(VAC.getSensor()[0, 1]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
+                    {
+                        VAC.getData();
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                    }
+                    else if (VACutkozes() == 0)
+                    {
+                        bool justone = false;
+                        VAC.getData();
+                        if (VAC.getSensor()[0, 3] == ".")
+                        {
+                            justone = true;
+                        }
+                        VAC.jobbra();
+                        VAC.getData();
+                        if (VACutkozes() == 0)
+                            continue;
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                        if (justone)
+                        {
+                            VAC.balra();
+                            VAC.getData();
+                        }
+                    }
+                    else if (alakzatvizsgal(VAC.getSensor()[0, 1]) != 0 && VACutkozes() != 0)
+                    {
+                        VAC.getData();
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                        VAC.balra();
+                        VAC.getData();
+                        if (VACutkozes() == 0)
+                            continue;
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                    }
+                }
+            }
+
         }
         public async Task wallfollow_right_escape()
         {
@@ -796,8 +904,115 @@ namespace hazi2
                     }
                 }
             }
-
+            if (tmp == irany.balra)
+            {
+                while (VAC.getAktpoz().y != now.y)
+                {
+                    if (VAC.getAktpoz().y == now.y)
+                        return;
+                    if (alakzatvizsgal(VAC.getSensor()[0, 3]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
+                    {
+                        VAC.getData();
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                    }
+                    else if (VACutkozes() == 0)
+                    {
+                        bool justone = false;
+                        VAC.getData();
+                        if (VAC.getSensor()[0, 1] == ".")
+                        {
+                            justone = true;
+                        }
+                        VAC.balra();
+                        VAC.getData();
+                        if (VACutkozes() == 0)
+                            continue;
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                        if (justone)
+                        {
+                            VAC.jobbra();
+                            VAC.getData();
+                        }
+                    }
+                    else if (alakzatvizsgal(VAC.getSensor()[0, 3]) != 0 && VACutkozes() != 0)
+                    {
+                        VAC.getData();
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                        VAC.jobbra();
+                        VAC.getData();
+                        if (VACutkozes() == 0)
+                            continue;
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                    }
+                }
+            }
             if (tmp == irany.le)
+            {
+                while (VAC.getAktpoz().x != now.x)
+                {
+                    if (VAC.getAktpoz().x == now.x)
+                        return;
+                    if (alakzatvizsgal(VAC.getSensor()[0, 3]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
+                    {
+                        VAC.getData();
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                    }
+                    else if (VACutkozes() == 0)
+                    {
+                        bool justone = false;
+                        VAC.getData();
+                        if (VAC.getSensor()[0, 1] == ".")
+                        {
+                            justone = true;
+                        }
+                        VAC.balra();
+                        VAC.getData();
+                        if (VACutkozes() == 0)
+                            continue;
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                        if (justone)
+                        {
+                            VAC.jobbra();
+                            VAC.getData();
+                        }
+                    }
+                    else if (alakzatvizsgal(VAC.getSensor()[0, 3]) != 0 && VACutkozes() != 0)
+                    {
+                        VAC.getData();
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                        VAC.jobbra();
+                        VAC.getData();
+                        if (VACutkozes() == 0)
+                            continue;
+                        VAC.leptet();
+                        VACrajzol();
+                        VAC.getData();
+                        await Task.Delay(move_milisec);
+                    }
+                }
+            }
+            if (tmp == irany.fel)
             {
                 while (VAC.getAktpoz().x != now.x)
                 {
