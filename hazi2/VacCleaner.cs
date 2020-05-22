@@ -8,8 +8,7 @@ using static hazi2.MainPage;
 
 namespace hazi2
 {
-
-    //két Interface: bemenet(szenzor), kimenet(motor)
+    //két Interface: bemenet (szenzor), kimenet (motor)
     public interface Irobotinput
     {
         void getData();
@@ -32,29 +31,20 @@ namespace hazi2
             this.aktirany = nez;
         }
 
-        //konstansok
-        /*
-        const int SOR = 12;
-        const int OSZLOP = 12;
-        const int H = 45;
-        const int W = 45;
-        */
         //tagváltozók
-
-        string[,] palya;
-        poz aktpoz;
-        irany aktirany;
-        static string[,] mem = new string[SOR, OSZLOP];
-        static string[,] sensor = new string[2, 5];
+        string[,] palya;    //tömb a pályán található karakterek eltárolásához ('x': porszívó, 'o': fal, '.': semmi)
+        poz aktpoz;     //változó az aktuális pozíció koordinátabeli tárolásához
+        irany aktirany;     //változó az aktuális irány tárolásához ('fel', 'le', 'jobbra', 'balra')
+        static string[,] mem = new string[SOR, OSZLOP];     //2-dimenziós tömb a robot memóriájának reprezentálásához
+        static string[,] sensor = new string[2, 5];     //2-dimenziós tömb a robot aktuális, szenzor által érzékelt területek reprezentálásához
         List<poz> Jartrect = new List<poz>();
 
         //setterek, getterek
-
         public void setAktpoz(poz p)
         {
             this.aktpoz = p;
         }
-        public poz GetFrontPoz()
+        public poz GetFrontPoz()    //getter a robot aktuális pozíciójához és aktuális irányához képest az előtte álló pozíció lekéréséhez
         {
             poz tmp = this.getAktpoz();
             switch (aktirany)
@@ -96,9 +86,8 @@ namespace hazi2
             return this.aktirany;
         }
 
-
         //tagfüggvények
-        public poz convertAktpozToIndex()
+        public poz convertAktpozToIndex()      //konvertáló függvény: pozícióból (koordináta) -> indexbe (tömb) vált
         {
             int x = (getAktpoz().x - 4 * H) / H;
             int y = (getAktpoz().y - H) / H;
@@ -107,15 +96,14 @@ namespace hazi2
             tmp.y = y;
             return tmp;
         }
-        public poz convertIndexToPoz(int x, int y)
+        public poz convertIndexToPoz(int x, int y)      //konvertáló függvény: indexből (tömb) -> pozícióba (koordináta) vált
         {
             poz tmp;
             tmp.x = x * H + 4 * H;
             tmp.y = y * H + H;
             return tmp;
-        }
-
-        public void leptet()
+        }   
+        public void leptet()    //a robot aktuális irányba történő léptetéséért felelős függvény
         {
             switch (aktirany)
             {
@@ -133,11 +121,11 @@ namespace hazi2
                     break;
             }
         }
-        public void iranyvalt(irany nez)
+        public void iranyvalt(irany nez)    //a robot irányát változtató függvény
         {
             this.aktirany = nez;
         }
-        public void jobbra()
+        public void jobbra()    //aktuális iránytól függően jobbra történő fordulásért felelős függvény
         {
             switch (aktirany)
             {
@@ -163,7 +151,7 @@ namespace hazi2
                     break;
             }
         }
-        public void balra()
+        public void balra()     //aktuális iránytól függőenbalra történő fordulásért felelős függvény
         {
             switch (aktirany)
             {
@@ -189,8 +177,8 @@ namespace hazi2
                     break;
             }
         }
-        public void getData()
-        {
+        public void getData()       //a robot aktuális állapotának lekérdezéséért felelős függvény: memória és szenzor feltöltését végzi.
+        {                         
             int k = 0;
             int l = 0;
             switch (aktirany)
@@ -210,7 +198,7 @@ namespace hazi2
                             l = 0;
                             k++;
                         }
-                        sensor[0, 0] = "?";
+                        sensor[0, 0] = "?";       //a szenzor segítségével a robot egy 2*5 méretű tömb egy bizonyos látószögön (kb.: 90 fok) belülre eső területét látja a pályának, melyben a falak takarása is szerepet játszhat
                         sensor[0, 4] = "?";
                         if (sensor[0, 1] == "o")
                             sensor[1, 0] = "?";
@@ -316,7 +304,7 @@ namespace hazi2
                     break;
             }
         }
-        public poz smallestdistanceindex() //mátrixon belüli index-szel tér vissza
+        public poz smallestdistanceindex()      //az escape függvényhez használt legközelebbi, még be nem járt pozíciót indexben visszaadó függvény
         {
             double smallest = 1000;
             poz tmp;
@@ -328,7 +316,7 @@ namespace hazi2
             {
                 for (int j = 0; j < OSZLOP; j++)
                 {
-                    if (mem[i, j] == ".") //ahol nincs fal
+                    if (mem[i, j] == ".")
                     {
                         poz tmp2;
                         tmp2.x = j;
@@ -336,7 +324,7 @@ namespace hazi2
                         tmp2 = convertIndexToPoz(j, i);
                         if (!Jartrect.Contains(tmp2))
                         {
-                            tmp = convertAktpozToIndex(); //aktpoz konvertálás
+                            tmp = convertAktpozToIndex();
                             valuetmp = distance(j, i, tmp.x, tmp.y);
                             if (valuetmp < smallest)
                             {
@@ -345,19 +333,16 @@ namespace hazi2
                                 index.y = i;
                             }
                         }
-
                     }
                 }
             }
             return index;
         }
-
-        double distance(int x1, int y1, int x2, int y2)
+        double distance(int x1, int y1, int x2, int y2)     //két pozíció közti távolságot visszaadó függvény
         {
             return Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         }
-
-        public List<poz> nearestindex() //mátrixon belüli index-szel tér vissza
+        public List<poz> nearestindex()     //a második legközelebbi (nem önmaga, tehát valójában legközelebbi) pozíciót visszaadó függvény
         {
             double smallest = 1000;
             double secondsmallest = 1000;
@@ -371,9 +356,9 @@ namespace hazi2
             {
                 for (int j = 0; j < OSZLOP; j++)
                 {
-                    if (mem[i, j] == ".") //ahol nincs fal
+                    if (mem[i, j] == ".")
                     {
-                        tmp = convertAktpozToIndex(); //aktpoz konvertálás
+                        tmp = convertAktpozToIndex();
                         valuetmp = distance(j, i, tmp.x, tmp.y);
                         if (valuetmp < smallest)
                         {
@@ -392,9 +377,9 @@ namespace hazi2
             {
                 for (int j = 0; j < OSZLOP; j++)
                 {
-                    if (mem[i, j] == ".") //ahol nincs fal
+                    if (mem[i, j] == ".")
                     {
-                        tmp = convertAktpozToIndex(); //aktpoz konvertálás
+                        tmp = convertAktpozToIndex();
                         valuetmp = distance(j, i, tmp.x, tmp.y);
                         if (valuetmp == secondsmallest)
                         {
@@ -408,6 +393,5 @@ namespace hazi2
             }
             return ind;
         }
-
     }
 }
