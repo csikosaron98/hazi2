@@ -35,9 +35,6 @@ namespace hazi2
     {
         //VÁLTOZÓK
 
-        MediaPlayer player1;
-        MediaPlayer player2;
-        MediaPlayer player3;
         List<poz> falakpoz = new List<poz>();
         List<Rectangle> jart_teglalapok = new List<Rectangle>();
         Rectangle porszivo = new Rectangle();
@@ -75,9 +72,6 @@ namespace hazi2
         public MainPage()
         {
             this.InitializeComponent();
-            player1 = new MediaPlayer();
-            player2 = new MediaPlayer();
-            player3 = new MediaPlayer();
         }
 
         //FÜGGVÉNYEK
@@ -94,6 +88,7 @@ namespace hazi2
             else
                 return 3;
         }
+        //függvény a robot esetleges ötközésének vizsgálatára -> visszatérés: 0 (ütközik), 1 (nem ütközik)
         public int VACutkozes()
         {
             int oszlop = 0;
@@ -201,7 +196,6 @@ namespace hazi2
                                 if (sens[i].x == VAC.getAktpoz().x)
                                 {
                                     x = 0;
-                                    player1.Play();
                                 }
                             }
                             break;
@@ -210,7 +204,6 @@ namespace hazi2
                                 if (sens[i].x == VAC.getAktpoz().x)
                                 {
                                     x = 0;
-                                    player1.Play();
                                 }
                             }
                             break;
@@ -219,7 +212,6 @@ namespace hazi2
                                 if (sens[i].y == VAC.getAktpoz().y)
                                 {
                                     x = 0;
-                                    player2.Play();
                                 }
                             }
                             break;
@@ -228,7 +220,6 @@ namespace hazi2
                                 if (sens[i].y == VAC.getAktpoz().y)
                                 {
                                     x = 0;
-                                    player2.Play();
                                 }
                             }
                             break;
@@ -2048,9 +2039,6 @@ namespace hazi2
         //pálya inicializálásáért felelős CLICK-event
         private void Button_Click(object sender, RoutedEventArgs e) 
         {
-            music1();
-            music2();
-            music3();
             int x = 4 * H;
             int y = H;
             StreamReader reader = new StreamReader(room);
@@ -2125,7 +2113,6 @@ namespace hazi2
                  {
                      if (lefedettség.Value == lefedettség.Maximum)
                      {
-                        player3.Play();
                          return;
                      }
                      if (sign_nochance == 1)
@@ -2210,37 +2197,6 @@ namespace hazi2
 
         private void Restart_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private async void music1()
-        {
-            Windows.Storage.StorageFolder folder1 = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Assets");
-            Windows.Storage.StorageFile file1 = await folder1.GetFileAsync("aaaaa.mp3");
-
-            player1.AutoPlay = false;
-            player1.Source = MediaSource.CreateFromStorageFile(file1);
-
-
-        }
-        private async void music2()
-        {
-            Windows.Storage.StorageFolder folder2 = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Assets");
-            Windows.Storage.StorageFile file2 = await folder2.GetFileAsync("baszodjal meg.mp3");
-
-            player2.AutoPlay = false;
-            player2.Source = MediaSource.CreateFromStorageFile(file2);
-
-
-        }
-        private async void music3()
-        {
-            Windows.Storage.StorageFolder folder3 = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Assets");
-            Windows.Storage.StorageFile file3 = await folder3.GetFileAsync("kalacskepuuu.mp3");
-
-            player3.AutoPlay = false;
-            player3.Source = MediaSource.CreateFromStorageFile(file3);
-
 
         }
     }
