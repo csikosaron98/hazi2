@@ -143,6 +143,7 @@
     <Content Include="robot.txt" />
     <Content Include="robot2.txt" />
     <Content Include="robot3.txt" />
+    <Content Include="robot4.txt" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
