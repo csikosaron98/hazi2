@@ -87,19 +87,6 @@ namespace hazi2
         }
 
         //tagfüggvények
-        public List<poz> convertSensorToPoz()
-        {
-            List<poz> sens_poz = new List<poz>();
-            getData();
-            for (int i = 0; i < 2; i++)
-            {
-                for (int j = 0; j < 5; j++)
-                {
-
-                }
-            }
-            return sens_poz;
-        }
         public poz convertAktpozToIndex()      //konvertáló függvény: pozícióból (koordináta) -> indexbe (tömb) vált
         {
             int x = (getAktpoz().x - 4 * H) / H;

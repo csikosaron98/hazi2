@@ -9,36 +9,42 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid x:Name="Grid">
-        <Button x:Name="button_beolvas" Content="Pálya beolvasása" Margin="87,218,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <Canvas x:Name="Canvas" Margin="115,0,-115,0">
-            <Button x:Name="alg1" Content="Random" Canvas.Left="-10" Canvas.Top="311" Click="alg1_Click" Width="100"/>
-            <Button x:Name="alg2" Content="Falkövetés" Canvas.Left="-10" Canvas.Top="357" Click="alg2_Click" Width="100"/>
-            <Button x:Name="alg3" Content="Spirál" Canvas.Left="-10" Canvas.Top="405" Click="alg3_Click" Width="100"/>
-            <Image Height="100" Width="100"/>
-            <Image Height="155" Canvas.Left="23" Canvas.Top="25" Width="155" Source="Assets\kep.png" NineGrid="-3,0,0,0"/>
-            <TextBlock x:Name="lefedettseg" Canvas.Left="1065" Canvas.Top="541" TextWrapping="Wrap"><Run Text="Lefedettség"/><LineBreak/><Run/></TextBlock>
-            <ProgressBar x:Name="lefedettség" Height="36" Canvas.Left="1037" Canvas.Top="500" Width="128" Value="50" ValueChanged="lefedettség_ValueChanged" Foreground="#FF21960F"/>
+        <Button x:Name="button_beolvas" Content="Pálya beolvasása" Margin="55,218,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Canvas x:Name="Canvas" Margin="104,10,-104,-10">
+            <Button x:Name="alg1" Content="Random" Canvas.Left="-36" Canvas.Top="311" Click="alg1_Click" Width="100"/>
+            <Button x:Name="alg2" Content="Falkövetés" Canvas.Left="-36" Canvas.Top="357" Click="alg2_Click" Width="100"/>
+            <Button x:Name="alg3" Content="Spirál" Canvas.Left="-36" Canvas.Top="405" Click="alg3_Click" Width="100"/>
+            <TextBlock x:Name="lefedettseg" Canvas.Left="1065" Canvas.Top="552" TextWrapping="Wrap" FontSize="15"><Run Text="Lefedettség"/><LineBreak/><Run/></TextBlock>
+            <ProgressBar x:Name="lefedettség" Height="36" Canvas.Left="1042" Canvas.Top="509" Width="128" Value="50" ValueChanged="lefedettség_ValueChanged" Foreground="#FF21960F"/>
             <Button x:Name="buttonelore" Content="Fel" Canvas.Left="1095" Canvas.Top="273" Width="70" Height="35" Click="buttonelore_Click"/>
             <Button x:Name="buttonbalra1" Content="Balra" Canvas.Left="1004" Canvas.Top="320" Width="70" Height="35" Click="buttonbalra1_Click"/>
             <Button x:Name="buttonjobbra" Content="Jobbra" Canvas.Left="1190" Canvas.Top="320" Width="70" Height="35" Click="buttonjobbra_Click"/>
             <Button x:Name="buttonhatra" Content="Le" Canvas.Left="1095" Canvas.Top="366" Width="70" Height="35" Click="buttonhatra_Click"/>
-            <Button x:Name="alg4" Content="Kígyó" Canvas.Left="-10" Canvas.Top="451" Width="100" Click="alg4_Click"/>
-            <Button x:Name="alg5" Content="Teszt" Canvas.Left="-9" Canvas.Top="535" Width="100" Click="alg5_Click"/>
-            <ComboBox x:Name="roomselect" Canvas.Left="-36" Canvas.Top="162" Width="137" SelectionChanged="roomselect_SelectionChanged" PlaceholderText="Válassz szobát!">
+            <Button x:Name="alg4" Content="Kígyó" Canvas.Left="-36" Canvas.Top="451" Width="100" Click="alg4_Click"/>
+            <Button x:Name="alg5" Content="Útkereső algoritmus" Canvas.Left="-69" Canvas.Top="539" Width="162" Click="alg5_Click" Height="33"/>
+            <ComboBox x:Name="roomselect" Canvas.Left="-56" Canvas.Top="162" Width="137" SelectionChanged="roomselect_SelectionChanged" PlaceholderText="Válassz szobát!">
                 <x:String>Szoba 1</x:String>
                 <x:String>Szoba 2</x:String>
                 <x:String>Szoba 3</x:String>
                 <x:String>Szoba 4</x:String>
+                <x:String>Szoba 5</x:String>
             </ComboBox>
             <Button x:Name="speed_plus" Content="+" Canvas.Left="1039" Canvas.Top="158" Height="35" Width="35" Click="speed_plus_Click"/>
             <Button x:Name="speed_minus" Content="-" Canvas.Left="1095" Canvas.Top="158" Height="35" Width="35" Click="speed_minus_Click"/>
-            <TextBlock x:Name="lefedettseg_Copy" Canvas.Left="1004" Canvas.Top="243" TextWrapping="Wrap" Text="Manuális irányítás:&#xD;&#xA;"/>
-            <TextBlock x:Name="lefedettseg_Copy1" Canvas.Left="1004" Canvas.Top="124" TextWrapping="Wrap" Text="Sebesség:&#xD;&#xA;"/>
-            <Button x:Name="restart" Content="↺" Canvas.Left="-89" Canvas.Top="22" Height="40" Width="40" FontSize="20" Click="Restart_Click"/>
+            <TextBlock x:Name="lefedettseg_Copy" Canvas.Left="954" Canvas.Top="231" TextWrapping="Wrap" Text="Manuális irányítás:&#xD;&#xA;" FontWeight="Bold" FontSize="20"/>
+            <TextBlock x:Name="lefedettseg_Copy1" Canvas.Left="954" Canvas.Top="109" TextWrapping="Wrap" Text="Sebesség:&#xD;&#xA;" FontWeight="Bold" FontSize="20"/>
+            <Button x:Name="restart" Content="↺" Canvas.Left="-91" Canvas.Top="18" Height="40" Width="40" FontSize="20" Click="Restart_Click"/>
             <Image x:Name="robot" Height="100" Canvas.Left="-13" Canvas.Top="30" Width="100"/>
-            <Image Source="Assets/porszivo.png" Height="118" Width="118" Canvas.Left="-28" Canvas.Top="39"/>
-            <TextBlock x:Name="lefedettseg_Copy2" Canvas.Left="-25" Canvas.Top="281" TextWrapping="Wrap"><Run Text="Algoritmusok:"/><LineBreak/><Run/></TextBlock>
+            <Image Source="Assets/porszivo.png" Height="118" Width="118" Canvas.Left="-43" Canvas.Top="39"/>
+            <TextBlock x:Name="algoritmusok" Canvas.Left="-73" Canvas.Top="273" TextWrapping="Wrap" FontWeight="Bold" FontSize="20"><Run Text="Algoritmusok:"/><LineBreak/><Run/></TextBlock>
+            <TextBlock x:Name="statok" Canvas.Left="954" Canvas.Top="457" TextWrapping="Wrap" FontWeight="Bold" FontSize="20"><Run Text="Statisztikák:"/><Run Text="&#xA;"/></TextBlock>
+            <Canvas Height="19" Canvas.Left="1159" Canvas.Top="701" Width="35">
+                <TextBlock x:Name="effect" Text="" TextWrapping="Wrap" Canvas.Left="-72" Canvas.Top="-78"/>
+            </Canvas>
+            <TextBlock x:Name="statok_Copy" Canvas.Left="1071" Canvas.Top="644" TextWrapping="Wrap" FontSize="15"><Run Text="Effektivitás"/><Run Text="&#xA;"/></TextBlock>
+
         </Canvas>
+
 
 
     </Grid>

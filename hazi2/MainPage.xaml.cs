@@ -43,8 +43,8 @@ namespace hazi2
         VacCleaner VAC = new VacCleaner(palya, robotpoz, irany.fel);
         public const int SOR = 20;
         public const int OSZLOP = 20;
-        public const int H = 35;
-        public const int W = 35;
+        public const int H = 30;
+        public const int W = 30;
         int j = 0;
         int progressbarint = 0;
         int szobaterulet = 1;
@@ -52,6 +52,7 @@ namespace hazi2
         string room = "";
         static string[,] palya = new string[SOR, OSZLOP];
         double effectivity = 0;
+        double count = 0;
 
         public enum irany
         {
@@ -89,6 +90,7 @@ namespace hazi2
             else
                 return 3;
         }
+
         //függvény a robot esetleges ötközésének vizsgálatára -> visszatérés: 0 (ütközik), 1 (nem ütközik)
         public int VACutkozes()
         {
@@ -236,6 +238,8 @@ namespace hazi2
             }
             return x;
         }
+
+        //megállapítja, hogy az irányban következő mezőn járt-e már -> visszatérés: 0 (járt), 1 (nem járt)
         public int VACjart()
         {
             int x = 2;
@@ -296,6 +300,8 @@ namespace hazi2
             }
             return x;
         }
+
+        //progressbar értékének folyamatos változását kezelő függvény (lépsenként)
         private void progressbar() 
         {
             if (!VAC.getJartrect().Contains(VAC.getAktpoz()))
@@ -304,6 +310,8 @@ namespace hazi2
                 lefedettség.Value = progressbarint;
             }
         }
+
+        //járt területek kirajzolásáért felelős függvény -> szürke négyzet
         private void jart_kirajzol()
         {
             for (int i = j; i < jart_teglalapok.Count; i++)
@@ -312,7 +320,7 @@ namespace hazi2
                 jart_teglalapok[i].Width = W;
                 jart_teglalapok[i].Height = H;
                 jart_teglalapok[i].Stroke = new SolidColorBrush(Windows.UI.Colors.Black);
-                jart_teglalapok[i].StrokeThickness = 1;
+                jart_teglalapok[i].StrokeThickness = 0.5;
 
                 Canvas.Children.Add(jart_teglalapok[i]);
 
@@ -388,12 +396,28 @@ namespace hazi2
             fal.Width = W;
             fal.Height = H;
             fal.Stroke = new SolidColorBrush(Windows.UI.Colors.Black);
-            fal.StrokeThickness = 1;
+            fal.StrokeThickness = 0.5;
 
             Canvas.Children.Add(fal);
 
             Canvas.SetLeft(fal, x);
             Canvas.SetTop(fal, y);
+        }
+
+        //semmi kirajzolása -> fehér négyzet
+        private void semmirajzol(string[,] tomb, int x, int y)
+        {
+            Rectangle semmi = new Rectangle();
+            semmi.Fill = new SolidColorBrush(Windows.UI.Colors.White);
+            semmi.Width = W;
+            semmi.Height = H;
+            semmi.Stroke = new SolidColorBrush(Windows.UI.Colors.Black);
+            semmi.StrokeThickness = 0.5;
+
+            Canvas.Children.Add(semmi);
+
+            Canvas.SetLeft(semmi, x);
+            Canvas.SetTop(semmi, y);
         }
 
         //robot kirajzolása -> piros négyzet
@@ -403,7 +427,7 @@ namespace hazi2
             porszivo.Width = W;
             porszivo.Height = H;
             porszivo.Stroke = new SolidColorBrush(Windows.UI.Colors.Black);
-            porszivo.StrokeThickness = 1;
+            porszivo.StrokeThickness = 0.5;
 
             Canvas.Children.Add(porszivo);
 
@@ -411,15 +435,19 @@ namespace hazi2
             Canvas.SetTop(porszivo, y);
             Canvas.SetZIndex(porszivo, 1);
         }
+
+        //a robot folyamatos rajzolásáért felelős függvény (+ progressbar kirajzolása, effektivitás kirajzolása, járt téglalapok kirajzolása)
         public void VACrajzol()
         {
             progressbar();
             Canvas.SetLeft(porszivo, (VAC.getAktpoz().x));
             Canvas.SetTop(porszivo, (VAC.getAktpoz().y));
             VAC.getJartrect().Add(new poz(VAC.getAktpoz().x, VAC.getAktpoz().y));
-            if (VAC.getJartrect().Contains(VAC.getAktpoz()))
+            if (VACjart() == 0)
             {
-                effectivity++;
+                count++;
+                effectivity = 1 + (count / szobaterulet);
+                effect.Text = effectivity.ToString("0.0000");
             }
             jart_teglalapok.Add(new Rectangle());
             jart_kirajzol();
@@ -433,9 +461,8 @@ namespace hazi2
         int which_leftright = 0;      //változó az "okos" snake algoritmushoz
         int sign_nochance = 0;       //változó az algoritmusok egyes esélyeinek/életeinek lejárásának jelzésére
         poz check;      //változó az algoritmus közbeni üzközés esetén az adott pozíció lementésére
-        int counter_firstcheck = 0;     //számláló-változó az esetleges algoritmus közbeni ütközések számlálásához
-        int counter_washere;        //számláló-változó az esetleges algoritmus közbeni ütközések számlálásához
-        poz towhere;
+        int counter_firstcheck = 0;     //számláló-változó az esetleges algoritmus közbeni ütközések számlálásához -> első ütközés esetén menti a pozíciót a későbbi vizsgálathoz
+        int counter_washere;        //számláló-változó az esetleges algoritmus közbeni ütközések számlálásához -> a két escapes wallfollow között dönt
 
         //algoritmus-függvények
         public async Task alg_random_egyszererint()
@@ -479,7 +506,7 @@ namespace hazi2
         {
             int count_turn = 1;
             double count_steps = 1;
-            int chance = 10;
+            int chance = SOR;
             VAC.getData();
             while (VACutkozes() != 0)
             {
@@ -489,7 +516,6 @@ namespace hazi2
                     VAC.getData();
                     if (VACutkozes() == 0)
                     {
-                        porszivo.Fill = new SolidColorBrush(Windows.UI.Colors.Yellow);
                         break;
                     }
                     VAC.leptet();
@@ -551,7 +577,7 @@ namespace hazi2
                 await Task.Delay(move_milisec);
                 VAC.getData();
                 while (VAC.getAktpoz().y != now.y)
-                {
+                {                  
                     if (alakzatvizsgal(VAC.getSensor()[0, 1]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
                     {
                         VAC.getData();
@@ -887,233 +913,6 @@ namespace hazi2
                 VAC.getData();
                 while (VAC.getAktpoz().y != now.y)
                 {
-                    int oszlop = 0;
-                    int sor = 0;
-                    switch (VAC.getIrany())
-                    {                     
-                        case irany.fel:
-                            {
-                                int k = 0;
-                                int l = 0;
-                                oszlop = (VAC.getAktpoz().x - 4 * H) / H - 2;
-                                sor = (VAC.getAktpoz().y - H) / H - 1;
-                                for (int i = sor; i > sor - 2; i--)
-                                {
-                                    for (int j = oszlop; j < oszlop + 5; j++)
-                                    {
-                                        if (VAC.getSensor()[k, l] == ".")
-                                        {
-                                            if (k == 0 && l == 0)
-                                            {
-                                                if (VAC.getAktpoz().x - 2 * W == towhere.x && VAC.getAktpoz().y - H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 0 && l == 1)
-                                            {
-                                                if (VAC.getAktpoz().x - W == towhere.x && VAC.getAktpoz().y - H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 0 && l == 2)
-                                            {
-                                                if (VAC.getAktpoz().x == towhere.x && VAC.getAktpoz().y - H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 0 && l == 3)
-                                            {
-                                                if (VAC.getAktpoz().x + W == towhere.x && VAC.getAktpoz().y - H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 0 && l == 4)
-                                            {
-                                                if (VAC.getAktpoz().x + 2 * W == towhere.x && VAC.getAktpoz().y - H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 1 && l == 0)
-                                            {
-                                                if (VAC.getAktpoz().x - 2 * W == towhere.x && VAC.getAktpoz().y - 2*H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 1 && l == 1)
-                                            {
-                                                if (VAC.getAktpoz().x - W == towhere.x && VAC.getAktpoz().y - 2*H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 1 && l == 2)
-                                            {
-                                                if (VAC.getAktpoz().x == towhere.x && VAC.getAktpoz().y - 2*H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 1 && l == 3)
-                                            {
-                                                if (VAC.getAktpoz().x + W == towhere.x && VAC.getAktpoz().y - 2*H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 1 && l == 4)
-                                            {
-                                                if (VAC.getAktpoz().x + 2 * W == towhere.x && VAC.getAktpoz().y - 2*H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        l++;
-                                    }
-                                    l = 0;
-                                    k++;
-                                }
-                            }
-                            break;
-                        case irany.le:
-                            {
-                                int k = 0;
-                                int l = 0;
-                                oszlop = (VAC.getAktpoz().x - 4 * H) / H + 2;
-                                sor = (VAC.getAktpoz().y - H) / H + 1;
-                                for (int i = sor; i < sor + 2; i++)
-                                {
-                                    for (int j = oszlop; j > oszlop - 5; j--)
-                                    {
-                                        if (VAC.getSensor()[k, l] == ".")
-                                        {
-                                            if (k == 0 && l == 0)
-                                            {
-                                                if (VAC.getAktpoz().x + 2 * W == towhere.x && VAC.getAktpoz().y + H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 0 && l == 1)
-                                            {
-                                                if (VAC.getAktpoz().x + W == towhere.x && VAC.getAktpoz().y + H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 0 && l == 2)
-                                            {
-                                                if (VAC.getAktpoz().x == towhere.x && VAC.getAktpoz().y + H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 0 && l == 3)
-                                            {
-                                                if (VAC.getAktpoz().x - W == towhere.x && VAC.getAktpoz().y + H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 0 && l == 4)
-                                            {
-                                                if (VAC.getAktpoz().x - 2 * W == towhere.x && VAC.getAktpoz().y + H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 1 && l == 0)
-                                            {
-                                                if (VAC.getAktpoz().x + 2 * W == towhere.x && VAC.getAktpoz().y + 2 * H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 1 && l == 1)
-                                            {
-                                                if (VAC.getAktpoz().x + W == towhere.x && VAC.getAktpoz().y + 2 * H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 1 && l == 2)
-                                            {
-                                                if (VAC.getAktpoz().x == towhere.x && VAC.getAktpoz().y + 2 * H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 1 && l == 3)
-                                            {
-                                                if (VAC.getAktpoz().x - W == towhere.x && VAC.getAktpoz().y + 2 * H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            if (k == 1 && l == 4)
-                                            {
-                                                if (VAC.getAktpoz().x - 2 * W == towhere.x && VAC.getAktpoz().y + 2 * H == towhere.y)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        l++;
-                                    }
-                                    l = 0;
-                                    k++;
-                                }
-                            }
-                            break;
-                        case irany.jobbra:
-                            {
-                                int k = 0;
-                                int l = 0;
-                                oszlop = (VAC.getAktpoz().x - 4 * H) / H + 1;
-                                sor = (VAC.getAktpoz().y - H) / H - 2;
-                                for (int j = oszlop; j < oszlop + 2; j++)
-                                {
-                                    for (int i = sor; i < sor + 5; i++)
-                                    {
-                                        if (VAC.getSensor()[k, l] == ".")
-                                        {
-                                            break;
-                                        }
-                                        l++;
-                                    }
-                                    l = 0;
-                                    k++;
-                                }
-                            }
-                            break;
-                        case irany.balra:
-                            {
-                                int k = 0;
-                                int l = 0;
-                                oszlop = (VAC.getAktpoz().x - 4 * H) / H - 1;
-                                sor = (VAC.getAktpoz().y - H) / H + 2;
-                                for (int j = oszlop; j > oszlop - 2; j--)
-                                {
-                                    for (int i = sor; i > sor - 5; i--)
-                                    {
-                                        if (VAC.getSensor()[k, l] == ".")
-                                        {
-                                            break;
-                                        }
-                                        l++;
-                                    }
-                                    l = 0;
-                                    k++;
-                                }
-                            }
-                            break;
-                    }
                     if (alakzatvizsgal(VAC.getSensor()[0, 3]) == 0 && VACutkozes() != 0) //fal mellett való léptetés
                     {
                         VAC.getData();
@@ -1353,7 +1152,7 @@ namespace hazi2
             if (tmp == irany.fel)
             {
                 while (VAC.getAktpoz().x != now.x)
-                {
+                {         
                     if (check.x == VAC.getAktpoz().x && check.y == VAC.getAktpoz().y)
                         counter_washere++;
                     if (VAC.getAktpoz().x == now.x)
@@ -1409,7 +1208,6 @@ namespace hazi2
         }
         public async Task wallfollow_left_goaround()
         {
-            //int chance = 10;
             poz now;
             VAC.getData();
             VACrajzol();
@@ -1421,11 +1219,15 @@ namespace hazi2
                 await Task.Delay(move_milisec);
                 VAC.getData();
             }
-
             bool quickleft = false;
             now = VAC.getAktpoz();
             VAC.jobbra();
             VAC.getData();
+            if (VACutkozes() == 0)
+            {
+                VAC.jobbra();
+                VAC.getData();
+            }
             if (VAC.getSensor()[0, 1] == ".")
             {
                 quickleft = true;
@@ -1558,7 +1360,6 @@ namespace hazi2
         }
         public async Task wallfollow_right_goaround()
         {
-            //int chance = 10;
             VAC.getData();
             VACrajzol();
             while (VACutkozes() != 0) //ütközésig megy
@@ -1572,6 +1373,11 @@ namespace hazi2
             bool quickright = false;
             VAC.balra();
             VAC.getData();
+            if (VACutkozes() == 0)
+            {
+                VAC.balra();
+                VAC.getData();
+            }
             if (VAC.getSensor()[0, 3] == ".")
             {
                 quickright = true;
@@ -1685,7 +1491,7 @@ namespace hazi2
         }
         public async Task snake()
         {
-            int chance = 2;
+            int chance = SOR;
             int jobbrakigyo = 0;
             VAC.getData();
             VACrajzol();
@@ -1847,7 +1653,7 @@ namespace hazi2
         }
         public async Task snake2_right()
         {
-            int chance = 10;
+            int chance = SOR;
             VAC.getData();
             VACrajzol();
             while (true)
@@ -2051,7 +1857,7 @@ namespace hazi2
         }
         public async Task snake2_left()
         {
-            int chance = 10;
+            int chance = SOR;
             VAC.getData();
             VACrajzol();
             while (true)
@@ -2255,6 +2061,7 @@ namespace hazi2
         }
         public async Task escape() 
         {
+            poz towhere;
             int washere1 = 0;
             int washere2 = 0;
             counter_washere = 0;
@@ -2282,6 +2089,11 @@ namespace hazi2
                     {
                         check = VAC.getAktpoz();
                         counter_firstcheck++;
+                        if (washere1 == 1 && washere2 == 1)
+                        {
+                            washere1 = 0;
+                            washere2 = 0;
+                        }
                     }
                     switch (VAC.getIrany())
                     { 
@@ -2419,6 +2231,7 @@ namespace hazi2
         //pálya inicializálásáért felelős CLICK-event
         private void Button_Click(object sender, RoutedEventArgs e) 
         {
+            effect.Text = "0.0000";
             int x = 4 * H;
             int y = H;
             StreamReader reader = new StreamReader(room);
@@ -2453,6 +2266,7 @@ namespace hazi2
                     else if (alakzatvizsgal(palya[i, j]) == 2)
                     {
                         szobaterulet++;
+                        semmirajzol(palya, x, y);
                     }
                     x += W;
                 }
@@ -2517,6 +2331,7 @@ namespace hazi2
             }
         }
 
+            
         //szoba-választó CLICK-event
         private void roomselect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -2534,6 +2349,9 @@ namespace hazi2
                     break;
                 case "Szoba 4":
                     room = "robot4.txt";
+                    break;
+                case "Szoba 5":
+                    room = "robot5.txt";
                     break;
                 default:
                     break;
@@ -2580,7 +2398,7 @@ namespace hazi2
 
         private void Restart_Click(object sender, RoutedEventArgs e)
         {
-            
+            App.Current.Exit();           
         }
     }
 }
